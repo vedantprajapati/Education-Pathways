@@ -1,16 +1,12 @@
-# Contributing to A Star
-We love your input! We want to make contributing to this project as easy and transparent as possible, whether it's:
+# Contributing
 
-- Reporting a bug
-- Discussing the current state of the code
-- Submitting a fix
-- Proposing new features
-- Becoming a maintainer
+## This contributing.md was obtained from:
+https://gist.github.com/briandk/3d2e8b3ec8daf5a27a62 
 
 ## We Develop with Github
 We use github to host code, to track issues and feature requests, as well as accept pull requests.
 
-## Pull Requests and A star
+## Pull Requests
 Pull requests are the best way to propose changes to the codebase (we use [Github Flow](https://guides.github.com/introduction/flow/index.html)). We actively welcome your pull requests:
 
 1. Fork the repo and create your branch from `master`.
