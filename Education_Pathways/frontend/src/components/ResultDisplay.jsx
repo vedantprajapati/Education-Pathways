@@ -111,7 +111,7 @@ We are looking for feedback to improve Education Pathways and make it more usefu
         </div>
 
         <div className={"search-result-display"} >
-            {this.state.results}
+            {this.state.results.length > 0 || this.state.input === "" ? this.state.results : <div> No courses found </div>}
         </div>
 
        
