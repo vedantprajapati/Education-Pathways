@@ -69,13 +69,17 @@ class TemplatedPathway(db.Document):
             return False
 
     def add_course(self, course_):
-        if course_ not in self.course:
+        if course_ not in self.pathway:
             self.update(add_to_set__pathway=course_)
 
     def remove_course(self, course_):
-        if course_ in self.course:
+        if course_ in self.pathway:
             self.pathway.remove(course_)
             self.save()
+            
+    @classmethod
+    def get_templated_pathway(cls, title_):
+        return TemplatedPathway.objects(title=title_).get()
 
     def expand(self):
         ret = {
@@ -85,7 +89,7 @@ class TemplatedPathway(db.Document):
         }
         return ret
 
-# test_pathway= TemplatedPathway(title="something",pathway=["something2"], comments="something3").save()
+# test_pathway= TemplatedPathway(title="something2",pathway=["something2"], comments="something3").save()
 class User(db.Document):
     username = db.StringField(required=True, unique=True)
     password = db.StringField(required=True)
