@@ -373,7 +373,13 @@ class TemplatedPathwayDao(Resource):
     def get(self):
         title = request.args.get("title")
         try:
-            resp = jsonify({"wishlist": User.get_wishlist(title_=title).expand()})
+            resp = jsonify(
+                {
+                    "templated_pathway": TemplatedPathway.get_templated_pathway(
+                        title_=title
+                    ).expand()
+                }
+            )
             resp.status_code = 200
             return resp
         except Exception as e:
@@ -396,7 +402,7 @@ class TemplatedPathwayDao(Resource):
                 # kajsndaks
                 templated_pathway = TemplatedPathway(
                     title=title, pathway=pathway, comments=comments
-                ).save()
+                )
                 resp = jsonify(
                     {
                         "Template Added": TemplatedPathway.get_templated_pathway(
@@ -410,7 +416,14 @@ class TemplatedPathwayDao(Resource):
 
                 courses = [Course.get(course_code) for course_code in pathway]
                 print(courses)
-                TemplatedPathway.objects(title=title).update_one(pathway=courses)
+                comments = (
+                    comments
+                    if comments
+                    else TemplatedPathway.get_templated_pathway(title=title).comments
+                )
+                TemplatedPathway.objects(title=title).update_one(
+                    pathway=courses, comments=comments
+                )
                 resp = jsonify(
                     {
                         "Template Modified": TemplatedPathway.get_templated_pathway(
