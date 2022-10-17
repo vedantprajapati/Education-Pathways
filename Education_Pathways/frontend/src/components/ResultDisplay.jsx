@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component, useState} from "react";
 import axios from 'axios'
 import Result from './Results'
 import './css/Result.css'
@@ -7,7 +7,6 @@ import "./css/styles.css";
 
 
 class SearchResultDisplay extends Component{
-
   constructor() {
     super();
     this.state = {
@@ -16,14 +15,22 @@ class SearchResultDisplay extends Component{
     };
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.searchTime = 0;
+    this.searching = false;
   }
+
 
   handleChange(event) {
     this.setState({input: event.target.value});
+    if (Date.now() - this.searchTime >= 100 && this.searching == false) {
+      this.searching = true;
+      this.getData(event.target.value);
+      this.searchTime = Date.now();
+    }
+
   }
 
   handleSubmit(event) {
-    event.preventDefault();
     this.getData(this.state.input)
   }
 
@@ -31,6 +38,7 @@ class SearchResultDisplay extends Component{
     axios.get(`https://assignment-1-starter-template.herokuapp.com/searchc?input=${input}`)
       .then(res => {
         console.log(`it is ${res.status}`)
+        this.searching = false;
         if (res.status === 200) {
           this.setState({results: []})
           
@@ -43,7 +51,7 @@ class SearchResultDisplay extends Component{
             }
             this.setState({results: result_temp})
           } else if (res.data.length === 0) {
-            alert("Course not found")
+            console.log("Course not found")
           }else {
             let result_temp = []
             result_temp.push(<Label></Label>)
@@ -99,7 +107,6 @@ We are looking for feedback to improve Education Pathways and make it more usefu
       </div> */}
             <form onSubmit={this.handleSubmit} className={"search"}>
                 <input placeholder={"Search for course code, course name, keyword ..."} className={"text-input"} type="text" value={this.state.input} onChange={this.handleChange} />
-                <input type="submit" value="Search" className={"submit-button"}/>
             </form>
         </div>
 
