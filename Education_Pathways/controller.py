@@ -1,5 +1,6 @@
 # this is the controller
 
+from importlib.resources import path
 from flask import jsonify, request
 from flask_restful import Resource, reqparse
 
@@ -359,6 +360,67 @@ class UserWishlistMinorCheck(Resource):
             resp = jsonify({"minorCheck": check})
             resp.status_code = 200
             return resp
+        except Exception as e:
+            resp = jsonify({"error": "something went wrong"})
+            resp.status_code = 400
+            return resp
+
+
+# Templated Pathways --------------------------------------------------------------
+
+
+class TemplatedPathwayDao(Resource):
+    def get(self):
+        title = request.args.get("title")
+        try:
+            resp = jsonify({"wishlist": User.get_wishlist(title_=title).expand()})
+            resp.status_code = 200
+            return resp
+        except Exception as e:
+            resp = jsonify({"error": "something went wrong"})
+            resp.status_code = 400
+            return resp
+
+    def post(self):
+        parser = reqparse.RequestParser()
+        parser.add_argument("title", required=True)
+        parser.add_argument("pathway", required=True)
+        parser.add_argument("comments", required=False)
+        data = parser.parse_args()
+        title = data["title"]
+        pathway = data["pathway"]
+        comments = data["comments"]
+        try:
+            templated_pathway_exists = TemplatedPathway.objects(title__exists=title)
+            if not templated_pathway_exists:
+                # kajsndaks
+                templated_pathway = TemplatedPathway(
+                    title=title, pathway=pathway, comments=comments
+                ).save()
+                resp = jsonify(
+                    {
+                        "Template Added": TemplatedPathway.get_templated_pathway(
+                            title_=title
+                        ).expand()
+                    }
+                )
+                resp.status_code = 200
+                return resp
+            else:
+
+                courses = [Course.get(course_code) for course_code in pathway]
+                print(courses)
+                TemplatedPathway.objects(title=title).update_one(pathway=courses)
+                resp = jsonify(
+                    {
+                        "Template Modified": TemplatedPathway.get_templated_pathway(
+                            title_=title
+                        ).expand()
+                    }
+                )
+                resp.status_code = 200
+                return resp
+
         except Exception as e:
             resp = jsonify({"error": "something went wrong"})
             resp.status_code = 400
