@@ -1,5 +1,6 @@
 # This is the model
 
+from turtle import title
 from config import app, db
 
 
@@ -53,7 +54,38 @@ class Wishlist(db.Document):
         }
         return ret
 
+class TemplatedPathway(db.Document):
+    title = db.StringField(required=True, unique=True)
+    pathway = db.ListField(db.ReferenceField(Course))
+    comments = db.StringField()
 
+    @classmethod
+    def create(cls, title_, pathway_, comments_=""):
+        try:        
+            templated_pathway = cls.objects(title=title)
+            templated_pathway.update_one(set__title=title_,set__pathway=pathway_, set__comments=comments_, upsert=True)
+            return True
+        except:
+            return False
+
+    def add_course(self, course_):
+        if course_ not in self.course:
+            self.update(add_to_set__pathway=course_)
+
+    def remove_course(self, course_):
+        if course_ in self.course:
+            self.pathway.remove(course_)
+            self.save()
+
+    def expand(self):
+        ret = {
+            "title": self.title,
+            "pathway": self.pathway,
+            "comments": self.comments,
+        }
+        return ret
+
+# test_pathway= TemplatedPathway(title="something",pathway=["something2"], comments="something3").save()
 class User(db.Document):
     username = db.StringField(required=True, unique=True)
     password = db.StringField(required=True)
