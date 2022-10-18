@@ -61,7 +61,7 @@ class TemplatedPathway(db.Document):
     @classmethod
     def create(cls, title_, pathway_, comments_=""):
         try:        
-            templated_pathway = cls.objects(title=title)
+            templated_pathway = cls.objects(title=title_)
             templated_pathway.update_one(set__title=title_,set__pathway=pathway_, set__comments=comments_, upsert=True)
             return True
         except:
