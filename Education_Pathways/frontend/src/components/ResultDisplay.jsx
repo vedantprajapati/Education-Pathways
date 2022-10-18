@@ -37,7 +37,7 @@ class SearchResultDisplay extends Component{
           if (res.data.length > 0) {
             let len = res.data.length
             let result_temp = []
-            result_temp.push(<h>Click on course code to go to course detail page</h>)
+            result_temp.push(<h>Tips: Click on course code to go to course detail page</h>)
             result_temp.push(<Label></Label>)
             for (let i = 0; i < len; i++) {
                 result_temp.push(<Result course_code={res.data[i].code} course_name={res.data[i].name}></Result>)
@@ -47,6 +47,7 @@ class SearchResultDisplay extends Component{
             alert("Course not found")
           }else {
             let result_temp = []
+            result_temp.push(<h>Tips: Click on course code to go to course detail page</h>)
             result_temp.push(<Label></Label>)
             result_temp.push(<Result course_code={res.data.course.code} course_name={res.data.course.name}></Result>)
             this.setState({results: result_temp})
