@@ -1,6 +1,5 @@
 # this is the controller
 
-from importlib.resources import path
 from flask import jsonify, request
 from flask_restful import Resource, reqparse
 
