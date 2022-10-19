@@ -232,16 +232,14 @@ class SyllabusHandler(Resource):
                 resp.status_code = 400
                 return resp
         try:
-            if not SyllabusHandler.objects(code__exists=code):
-                SyllabusHandler.create()
+            syl = SyllabusHandler.objects(code=code)
+            syl.file = file
+            resp = jsonify({"message": f"Added syllabus to {code}"})
+            resp.status_code = 200
         except Exception as e:
             resp = jsonify({"error": "something went wrong"})
             resp.status_code = 400
             return resp
-            
-
-
-
 
 # ------------------------------------------------------------
 

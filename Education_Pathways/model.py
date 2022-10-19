@@ -124,8 +124,7 @@ class Minor(db.Document):
 
 class CourseSyllabus(db.Document):
     course_code = db.StringField(required=True, unique=True)
-    #syllabus = db.FileField(required=True)
-    code = db.StringField(required=True, unique=True)
+    syllabus = db.FileField()
 
     @classmethod
     def create(cls, course_code_, syllabus_):
