@@ -10,7 +10,7 @@ class SearchResultDisplay extends Component {
     super();
     this.state = {
       input: "",
-      professor: "",
+      syllabusSearch: false,
       faculty: "",
       courseLevel: "",
       results: [],
@@ -26,10 +26,6 @@ class SearchResultDisplay extends Component {
     });
   }
 
-  handleChangeProfessor(event) {
-    this.setState({ professor: event.target.value });
-  }
-
   handleSubmit(event) {
     event.preventDefault();
     this.getData(this.state);
@@ -38,7 +34,7 @@ class SearchResultDisplay extends Component {
   getData = (state) => {
     axios
       .get(
-        `https://assignment-1-starter-template.herokuapp.com/searchc?input=${state.input}&professor=${state.professor}&faculty=${state.faculty}&courseLevel=${state.courseLevel}`
+        `https://assignment-1-starter-template.herokuapp.com/searchc?input=${state.input}&faculty=${state.faculty}&courseLevel=${state.courseLevel}&syllabusSearch=${state.syllabusSearch}`
       )
       .then((res) => {
         console.log(`it is ${res.status}`);
@@ -131,15 +127,21 @@ We are looking for feedback to improve Education Pathways and make it more usefu
                 </select>
               </div>
               <div>
-                <label for="professor">Professor:</label>
+                <label for="syllabusSearch">Search For Keywords In Syllabus?</label>
                 <input
-                id="professor"
-                placeholder={"..."}
-                className={"text-input-professor"}
-                type="text"
-                name="professor"
-                value={this.state.professor}
-                onChange={this.handleChange}
+                id="syllabusSearch"
+                type="checkbox"
+                name="syllabusSearch"
+                className={"select"}
+                checked={this.state.syllabusSearch}
+                onChange={(e) => {
+                  this.handleChange({
+                    target: {
+                      name: e.target.name,
+                      value: e.target.checked,
+                    },
+                  });
+                }}
                 />
               </div>
             </div>
