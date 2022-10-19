@@ -15,6 +15,7 @@ import CourseDescriptionPage from "./CourseDescription";
 // import Wishlist from './Wishlist';
 // import SignUp from './SignUp'
 import SearchResultDisplay from "./ResultDisplay";
+import AddPathwayPage from "./AddPathway";
 
 function CourseDescription(props) {
   let query = useQuery();
@@ -70,6 +71,11 @@ export default class NavbarComp extends Component {
                   Search
                 </Nav.Link> */}
               </Nav>
+              <Nav>
+                <Nav.Link as={Link} to="/pathway/add">
+                  Add Pathway
+                </Nav.Link>
+              </Nav>
             </Navbar.Collapse>
           </Navbar>
         </div>
@@ -110,6 +116,9 @@ export default class NavbarComp extends Component {
                 </p>
               </div>
               {/* <SearchResultDisplay /> */}
+            </Route>
+            <Route path="/pathway/add">
+              <AddPathwayPage />
             </Route>
             <Route path="/search">
               <SearchResultDisplay />
