@@ -113,6 +113,8 @@ We are looking for feedback to improve Education Pathways and make it more usefu
                   <option value="MIN">Mineral Engineering</option>
                   <option value="MSE">Material Science Engineering</option>
                   <option value="ESC">Engineering Science</option>
+                  <option value="artsci">Arts & Science</option>
+                  
                 </select>
               </div>
               <div>
