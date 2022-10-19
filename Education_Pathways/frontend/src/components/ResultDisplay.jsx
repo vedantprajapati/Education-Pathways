@@ -32,13 +32,13 @@ class SearchResultDisplay extends Component {
 
   handleSubmit(event) {
     event.preventDefault();
-    this.getData(this.state.input);
+    this.getData(this.state);
   }
 
-  getData = (input) => {
+  getData = (state) => {
     axios
       .get(
-        `https://assignment-1-starter-template.herokuapp.com/searchc?input=${input}`
+        `https://assignment-1-starter-template.herokuapp.com/searchc?input=${state.input}&professor=${state.professor}&faculty=${state.faculty}&courseLevel=${state.courseLevel}`
       )
       .then((res) => {
         console.log(`it is ${res.status}`);
