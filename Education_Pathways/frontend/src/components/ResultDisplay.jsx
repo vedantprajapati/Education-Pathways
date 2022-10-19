@@ -10,6 +10,9 @@ class SearchResultDisplay extends Component {
     super();
     this.state = {
       input: "",
+      professor: "",
+      faculty: "",
+      courseLevel: "",
       results: [],
     };
     this.handleChange = this.handleChange.bind(this);
@@ -17,7 +20,14 @@ class SearchResultDisplay extends Component {
   }
 
   handleChange(event) {
-    this.setState({ input: event.target.value });
+    this.setState({
+      ...this.state,
+      [event.target.name]: event.target.value
+    });
+  }
+
+  handleChangeProfessor(event) {
+    this.setState({ professor: event.target.value });
   }
 
   handleSubmit(event) {
@@ -67,26 +77,6 @@ class SearchResultDisplay extends Component {
       });
   };
 
-  // search_render = (input) => {
-
-  //   <div className="SearchQuery">
-  //       <div style={{ marginTop: "10%" }}>
-  //           <h1> Education Pathways Search</h1>
-  //           <br></br>
-  //           <form onSubmit={this.handleSubmit} className={"search"}>
-  //               <input placeholder={"Search for course code, course name, keyword ..."} className={"text-input"} type="text" value={this.state.input} onChange={this.handleChange} />
-  //               <input type="submit" value="Submit" className={"submit-button"}/>
-  //           </form>
-  //       </div>
-
-  //       <div className={"search-result-display"} >
-  //           {this.state.results}
-  //       </div>
-
-  //     </div>
-
-  // }
-
   render() {
     return (
       <div className="SearchQuery">
@@ -103,14 +93,56 @@ We are looking for feedback to improve Education Pathways and make it more usefu
 
       </div> */}
           <form onSubmit={this.handleSubmit} className={"search"}>
-            <input
-              placeholder={"Search for course code, course name, keyword ..."}
-              className={"text-input"}
-              type="text"
-              value={this.state.input}
-              onChange={this.handleChange}
-            />
-            <input type="submit" value="Search" className={"submit-button"} />
+            <div>
+              <input
+                placeholder={"Search for course code, course name, keyword ..."}
+                className={"text-input"}
+                type="text"
+                name="input"
+                value={this.state.input}
+                onChange={this.handleChange}
+              />
+              <input type="submit" value="Search" className={"submit-button"} />
+            </div>
+            <div className={"advanced-search-options"}>
+              <br></br>
+              <div>
+                <label for="faculties">Faculty:</label>
+                <select name="faculty" id="faculties" className={"select"} onChange={this.handleChange}>
+                  <option value="all">All</option>
+                  <option value="ECE">Electrical & Computer Engineering</option>
+                  <option value="CHE">Chemical Engineering</option>
+                  <option value="CIV">Civil Engineering</option>
+                  <option value="MIE">Mechanical & Industrial Engineering</option>
+                  <option value="MIN">Mineral Engineering</option>
+                  <option value="MSE">Material Science Engineering</option>
+                  <option value="ESC">Engineering Science</option>
+                </select>
+              </div>
+              <div>
+                <label for="courseLevels">Course Level:</label>
+                <select name="courseLevel" id="courseLevels" className={"select"} onChange={this.handleChange}>
+                  <option value="any">All</option>
+                  <option value="100">100</option>
+                  <option value="200">200</option>
+                  <option value="300">300</option>
+                  <option value="400">400</option>
+                  <option value="500">500</option>
+                </select>
+              </div>
+              <div>
+                <label for="professor">Professor:</label>
+                <input
+                id="professor"
+                placeholder={"..."}
+                className={"text-input-professor"}
+                type="text"
+                name="professor"
+                value={this.state.professor}
+                onChange={this.handleChange}
+                />
+              </div>
+            </div>
           </form>
         </div>
 
