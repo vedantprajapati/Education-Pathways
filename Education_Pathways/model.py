@@ -121,3 +121,16 @@ class Minor(db.Document):
             if yes:
                 ret.append(mn)
         return ret
+
+class CourseSyllabus(db.Document):
+    course_code = db.StringField(required=True, unique=True)
+    #syllabus = db.FileField(required=True)
+    code = db.StringField(required=True, unique=True)
+
+    @classmethod
+    def create(cls, course_code_, syllabus_):
+        syl = cls.objects(course_code=course_code_)
+        syl.update_one(set__course_code=course_code_, set__syllabus=syllabus_, upsert=True)
+        return True
+
+

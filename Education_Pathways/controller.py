@@ -7,6 +7,8 @@ from flask_restful import Resource, reqparse
 from config import app
 from model import *
 from fuzzy import nysiis
+import werkzeug
+from werkzeug.utils import secure_filename
 import re
 
 
@@ -211,6 +213,34 @@ class ShowCourseGraph(Resource):
             resp = jsonify({"error": "something went wrong"})
             resp.status_code = 400
             return resp
+
+class SyllabusHandler(Resource):
+    def get(self):
+        pass
+        
+    def post (self):
+        parser = reqparse.RequestParser()
+        parser.add_argument("file", type=werkzeug.FileStorage, location="files", required=True)
+        parser.add_argument("code", required=True)
+
+        data = parser.parse_args()
+        file = data["file"]
+        code = data["code"]
+
+        if (file.filename).rsplit(".", 1)[1].lower() != "pdf":
+                resp = jsonify({"error": "Invalid file type"})
+                resp.status_code = 400
+                return resp
+        try:
+            if not SyllabusHandler.objects(code__exists=code):
+                SyllabusHandler.create()
+        except Exception as e:
+            resp = jsonify({"error": "something went wrong"})
+            resp.status_code = 400
+            return resp
+            
+
+
 
 
 # ------------------------------------------------------------

@@ -2,6 +2,7 @@
 
 from flask import Flask, send_from_directory
 from flask_restful import Api
+from model import *
 import os
 
 import config
@@ -46,6 +47,7 @@ def serve(path):
 
 if __name__ == "__main__":
     # app.run(host='0.0.0.0', port=5000, extra_files=['app.py', 'controller.py', 'model.py'])
+    syl = CourseSyllabus(course_code='ECE343', code='1')
     app.run(threaded=True, port=5000)
     # with open("test.json") as f:
     #     data = json.load(f)
