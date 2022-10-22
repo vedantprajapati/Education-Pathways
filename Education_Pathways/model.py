@@ -2,6 +2,7 @@
 
 from config import app, db
 
+
 class Course(db.Document):
     code = db.StringField(required=True, unique=True)
     name = db.StringField(required=True)
@@ -13,18 +14,15 @@ class Course(db.Document):
     keyword = db.StringField(required=True)
     graph = db.StringField(required=True)
 
-    meta = {'indexes': [
-        '$keyword'
-    ]}
+    meta = {"indexes": ["$keyword"]}
 
     @classmethod
     def get(cls, code_):
         return cls.objects(code=code_).get()
-    
+
     @classmethod
     def get_requisite_graph(cls, code_):
         return cls.objects(code=code_).get().graph
-
 
 
 class Wishlist(db.Document):
@@ -33,16 +31,15 @@ class Wishlist(db.Document):
     comments = db.DictField()
 
     @classmethod
-    def create(cls,username_):
+    def create(cls, username_):
         usr = cls.objects(username=username_)
-        usr.update_one(set__course=[],
-                       upsert=True)
+        usr.update_one(set__course=[], upsert=True)
         return True
-    
+
     def add_course(self, course_):
         if course_ not in self.course:
             self.update(add_to_set__course=course_)
-    
+
     def remove_course(self, course_):
         if course_ in self.course:
             self.course.remove(course_)
@@ -50,9 +47,9 @@ class Wishlist(db.Document):
 
     def expand(self):
         ret = {
-            'username': self.username,
-            'course': self.course,
-            'comments': self.comments
+            "username": self.username,
+            "course": self.course,
+            "comments": self.comments,
         }
         return ret
 
@@ -65,9 +62,7 @@ class User(db.Document):
     def create(cls, username_, password_):
         usr = cls.objects(username=username_)
         Wishlist.create(username_)
-        usr.update_one(set__username=username_, 
-                       set__password=password_,
-                       upsert=True)
+        usr.update_one(set__username=username_, set__password=password_, upsert=True)
         return True
 
     @classmethod
@@ -85,9 +80,9 @@ class User(db.Document):
     def verify_password(cls, username_, password_):
         usr = cls.objects(username=username_).get()
         if usr and usr.password == password_:
-                return True
+            return True
         return False
-    
+
     @classmethod
     def get_wishlist(cls, username_):
         return Wishlist.objects(username=username_).get()
@@ -105,13 +100,13 @@ class User(db.Document):
 class Minor(db.Document):
     name = db.StringField(required=True, unique=True)
     description = db.StringField()
-    requisites = db.ListField(db.ListField(db.ListField())) 
-            #[ (['code', 'code'], 2), (['code', 'code'], 1), ] 
+    requisites = db.ListField(db.ListField(db.ListField()))
+    # [ (['code', 'code'], 2), (['code', 'code'], 1), ]
 
     @classmethod
     def get(cls, name_):
         return cls.objects(name=name_).get()
-    
+
     @classmethod
     def check(cls, codes_):
         ret = []
