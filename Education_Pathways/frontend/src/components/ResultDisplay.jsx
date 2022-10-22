@@ -42,9 +42,12 @@ class SearchResultDisplay extends Component {
           this.setState({ results: [] });
 
           if (res.data.length > 0) {
+
             let len = res.data.length;
             let result_temp = [];
+            result_temp.push(<h>Tips: Click on course code to go to course detail page</h>);
             result_temp.push(<Label></Label>);
+
             for (let i = 0; i < len; i++) {
               result_temp.push(
                 <Result
@@ -55,9 +58,11 @@ class SearchResultDisplay extends Component {
             }
             this.setState({ results: result_temp });
           } else if (res.data.length === 0) {
+
             alert("Course not found");
           } else {
             let result_temp = [];
+            result_temp.push(<h>Tips: Click on course code to go to course detail page</h>);
             result_temp.push(<Label></Label>);
             result_temp.push(
               <Result
@@ -66,6 +71,7 @@ class SearchResultDisplay extends Component {
               ></Result>
             );
             this.setState({ results: result_temp });
+
           }
         } else if (res.status === 400) {
           alert("System Error. Please refresh");
