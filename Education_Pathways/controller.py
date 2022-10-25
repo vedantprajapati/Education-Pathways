@@ -83,7 +83,14 @@ class UserLogin(Resource):
 class SearchCourse(Resource):
     def get(self):
         input = request.args.get("input")
+        faculty = request.args.get("faculty")
+        course_level = request.args.get("courseLevel")
+        syllabus_search = request.args.get("syllabusSearch")
+
         code = re.findall("[a-zA-Z]{3}\d{3}[hH]?\d?", input)
+        print(code)
+
+        # Return all courses if "" ?
         if code:
             code = code[0].upper()
             if len(code) == 6:
