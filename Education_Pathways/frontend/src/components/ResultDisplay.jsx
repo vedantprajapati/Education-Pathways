@@ -33,11 +33,8 @@ class SearchResultDisplay extends Component {
 
   getData = (state) => {
     axios
-      // .get(
-      //   `https://assignment-1-starter-template.herokuapp.com/searchc?input=${state.input}`
-      // )
       .get(
-          `searchc?input=${state.input}&faculty=${state.faculty}&courseLevel=${state.courseLevel}&syllabusSearch=${state.syllabusSearch}`
+          `https://assignment-1-starter-template.herokuapp.com/searchc?input=${state.input}&faculty=${state.faculty}&courseLevel=${state.courseLevel}&syllabusSearch=${state.syllabusSearch}`
         )
       .then((res) => {
         console.log(`it is ${res.status}`);
