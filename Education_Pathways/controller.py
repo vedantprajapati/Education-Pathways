@@ -115,9 +115,9 @@ class SearchCourse(Resource):
             if faculty != "all":
                 course_filter += faculty
             if course_level != "all":
-                course_filter += course_level[0]
+                course_filter += course_level.replace("0", "\d")
 
-            search = Course.objects(code__contains=course_filter).search_text(input).order_by("$text_score")
+            search = Course.objects(code__regex=course_filter).search_text(input).order_by("$text_score")
 
             resp = jsonify(search)
             resp.status_code = 200
