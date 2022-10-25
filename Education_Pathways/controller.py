@@ -89,6 +89,9 @@ class SearchCourse(Resource):
 
         code = re.findall("[a-zA-Z]{3}\d{3}[hH]?\d?", input)
         print(code)
+        print(faculty)
+        print(course_level)
+        print(syllabus_search)
 
         # Return all courses if "" ?
         if code:
@@ -108,7 +111,14 @@ class SearchCourse(Resource):
                     return resp
         input = " ".join([nysiis(w) for w in input.split()])
         try:
-            search = Course.objects.search_text(input).order_by("$text_score")
+            course_filter = ""
+            if faculty != "all":
+                course_filter += faculty
+            if course_level != "all":
+                course_filter += course_level[0]
+
+            search = Course.objects(code__contains=course_filter).search_text(input).order_by("$text_score")
+
             resp = jsonify(search)
             resp.status_code = 200
             return resp
