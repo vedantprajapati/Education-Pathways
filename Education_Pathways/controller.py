@@ -88,8 +88,6 @@ class SearchCourse(Resource):
         syllabus_search = request.args.get("syllabusSearch")
 
         code = re.findall("[a-zA-Z]{3}\d{3}[hH]?\d?", input)
-
-        # Return all courses if "" ?
         if code:
             code = code[0].upper()
             if len(code) == 6:
