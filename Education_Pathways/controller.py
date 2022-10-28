@@ -8,6 +8,7 @@ from config import app
 from model import *
 from fuzzy import nysiis
 import werkzeug
+from werkzeug.datastructures import FileStorage
 from werkzeug.utils import secure_filename
 import re
 
@@ -218,24 +219,36 @@ class SyllabusHandler(Resource):
     def get(self):
         pass
         
-    def post (self):
-        parser = reqparse.RequestParser()
-        parser.add_argument("file", type=werkzeug.FileStorage, location="files", required=True)
-        parser.add_argument("code", required=True)
+    def post(self):
 
-        data = parser.parse_args()
-        file = data["file"]
-        code = data["code"]
+        # Make sure file isn't empty
+        if len(request.files)!=0:
+            code = request.form['code']
+            file = request.files['file']
+            print(file.filename)
+        else:
+            resp = jsonify({"error": "Missing file"})
+            resp.status_code = 400
+            return resp
 
+        # Ensure correct file type
         if (file.filename).rsplit(".", 1)[1].lower() != "pdf":
                 resp = jsonify({"error": "Invalid file type"})
                 resp.status_code = 400
                 return resp
+        
         try:
-            syl = SyllabusHandler.objects(code=code)
-            syl.file = file
+            syl = Syllabus.objects(course_code=code).first()
+            if syl:
+                syl.file.replace(file)
+                syl.save()
+            else:
+                syl = Syllabus(course_code=code)
+                syl.file.put(file)
+                syl.save()
             resp = jsonify({"message": f"Added syllabus to {code}"})
             resp.status_code = 200
+            return resp
         except Exception as e:
             resp = jsonify({"error": "something went wrong"})
             resp.status_code = 400
