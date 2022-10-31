@@ -1,6 +1,6 @@
 # this is the controller
 
-from flask import jsonify, request
+from flask import jsonify, request, send_file
 from flask_restful import Resource, reqparse
 
 # from flask_cors import cross_origin
@@ -217,8 +217,27 @@ class ShowCourseGraph(Resource):
 
 class SyllabusHandler(Resource):
     def get(self):
-        pass
-        
+        code = request.args.get("code")
+        syl = Syllabus.objects(course_code=code)
+
+        if not syl: 
+            resp = jsonify({"error": f"No syllabus for {code}"})
+            resp.status_code =400
+            return resp
+        try:
+            syl = syl.first().file
+            resp = send_file(
+                path_or_file=syl,
+                mimetype="application/octet-stream",
+                as_attachment=True,
+                download_name=f"{code}_Syllabus")
+            return resp
+        except Exception as e:
+            resp = jsonify({"error": "something went wrong"})
+            resp.status_code = 400
+            print(e)
+            return resp  
+       
     def post(self):
 
         # Make sure file isn't empty
@@ -253,6 +272,12 @@ class SyllabusHandler(Resource):
             resp = jsonify({"error": "something went wrong"})
             resp.status_code = 400
             return resp
+
+# syl = Syllabus.objects(course_code="ECE444H1").first()
+# resp = send_file(
+#                 path_or_file=syl,
+#                 mimetype="application/octet-stream",
+#                 as_attachment=True)
 
 # ------------------------------------------------------------
 
