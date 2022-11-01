@@ -367,12 +367,22 @@ class UserWishlistMinorCheck(Resource):
 
 # Templated Pathways --------------------------------------------------------------
 
+
 class TemplatedPathwayDao(Resource):
     def get(self):
-        title_ = request.args.get('title')
+        title_ = request.args.get("title")
+        if not title_:
+            return jsonify({"error": "title is required"}), 400
+        if not TemplatedPathway.objects(title=title_):
+            resp = jsonify({"message": f"Pathway {title_} doesn't exist"})
+            resp.status_code = 404
+            return resp
         try:
-            resp = jsonify({"templated_pathway": TemplatedPathway.get_templated_pathway(title_)})
-            print('yo')
+            resp = jsonify(
+                {"templated_pathway": TemplatedPathway.get_templated_pathway(title_)}
+            )
+            print("yo")
+            print(title_)
             print(TemplatedPathway.get_templated_pathway(title_))
 
             print(resp)
@@ -433,6 +443,33 @@ class TemplatedPathwayDao(Resource):
                 return resp
 
         except Exception as e:
+            resp = jsonify({"error": "something went wrong"})
+            resp.status_code = 400
+            return resp
+
+
+class TopTemplatedPathways(Resource):
+    def get(self):
+        try:
+            
+            print("yo")
+            print(TemplatedPathway.objects().order_by("-count"))
+            pathways = [
+                {
+                    "title": tp.title,
+                    "pathway": [tp.pathway[i].id for i in range(len(tp.pathway))],
+                    "comments": tp.comments,
+                }
+                for tp in TemplatedPathway.objects()
+            ]
+            print(pathways)
+            resp = jsonify({"top_pathways": pathways})
+            resp.status_code = 200
+            
+            return resp
+        except Exception as e:
+            print(e)
+            print('yooooooooooooooooooooo')
             resp = jsonify({"error": "something went wrong"})
             resp.status_code = 400
             return resp

@@ -16,7 +16,7 @@ import CourseDescriptionPage from "./CourseDescription";
 // import Wishlist from './Wishlist';
 // import SignUp from './SignUp'
 import SearchResultDisplay from "./ResultDisplay";
-
+import TopTemplatedPathway from "./TopTemplatedPathways";
 function CourseDescription(props) {
   let query = useQuery();
   return <CourseDescriptionPage code={query.get("code")} />;
@@ -124,6 +124,7 @@ export default class NavbarComp extends Component {
             ></Route>
             <Route path="/templated_pathways">
               <TemplatedPathway/>
+              <TopTemplatedPathway/>
             </Route>
             <Route path="/">
               <SearchResultDisplay />

@@ -37,14 +37,14 @@ class TemplatedPathway extends Component {
     }
 
     getData = (state) => {
-
-        axios
+        if (this.state.input === "" || this.state.input === null){
+            this.setState({ results: [] });
+        }
+        else{
+            axios
             .get(
                 `http://localhost:5000/templated_pathways?title=${this.state.input}`
             )
-            // .catch((e) => {
-            //     console.log(e);
-            // })
             .then((res) => {
                 console.log(this.state.input);
                 // console.log(`it is ${res.status}`);
@@ -96,6 +96,8 @@ class TemplatedPathway extends Component {
                     alert("System Error. Please refresh");
                 }
             });
+        }
+
     };
 
     render() {
