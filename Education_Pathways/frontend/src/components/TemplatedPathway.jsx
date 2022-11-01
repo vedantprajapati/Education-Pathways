@@ -4,7 +4,9 @@ import Result from "./Results";
 import "./css/Result.css";
 import Label from "./Label";
 import "./css/styles.css";
-
+import Container from "react-bootstrap/Container";
+import Row from "react-bootstrap/Row";
+import Col from "react-bootstrap/Col";
 class TemplatedPathway extends Component {
     constructor() {
         super();
@@ -15,6 +17,12 @@ class TemplatedPathway extends Component {
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
     }
+
+    redirectCourse = (course) => {
+        this.props.history.push(`/course/details/${course}`, {
+          course_code: course,
+        });
+      };
 
     handleChange(event) {
         this.setState({
@@ -29,51 +37,60 @@ class TemplatedPathway extends Component {
     }
 
     getData = (state) => {
+
         axios
             .get(
-                `https://assignment-1-starter-template.herokuapp.com/templated_pathways?title=${this.state.input}`
+                `http://localhost:5000/templated_pathways?title=${this.state.input}`
             )
+            // .catch((e) => {
+            //     console.log(e);
+            // })
             .then((res) => {
                 console.log(this.state.input);
-                console.log(`it is ${res.status}`);
-                console.log(res.data)
-                console.log(res.data.length)
-                console.log(res.data.title)
-                console.log(res.data.TemplatedPathway)
+                // console.log(`it is ${res.status}`);
+                console.log(res.data.templated_pathway.title)
+                console.log(res.data.templated_pathway.pathway)
+                console.log(res.data.templated_pathway.comments)
+                console.log(res.data.title);
+                console.log(res.data.templated_pathway.length)
+                
                 if (res.status === 200) {
                     this.setState({ results: [] });
 
-                    if (res.data.length > 0) {
-
-                        let len = res.data.length;
+                    if (res.data.templated_pathway) {
+                        
+                        let len = res.data.templated_pathway.pathway.length;
                         let result_temp = [];
-                        result_temp.push(<h>Tips: Click on course code to go to course detail page</h>);
-                        result_temp.push(<Label></Label>);
-
+                        result_temp.push(<h2>Pathway Name: {res.data.templated_pathway.title}</h2>);
+                        result_temp.push(<p>{res.data.templated_pathway.comments}</p>);
+                        result_temp.push(<h5>Tips: Click on course code to go to course detail page</h5>);
+                        this.setState({ results: result_temp });
+                        console.log(this.state.result_temp)
+                        console.log(this.state.results)
                         for (let i = 0; i < len; i++) {
                             result_temp.push(
-                                <Result
-                                    course_code={res.data[i].code}
-                                    course_name={res.data[i].name}
-                                ></Result>
+                                <Container>        
+                                    <a
+                                        href={`courseDetails/${res.data.templated_pathway.pathway[i]}`}
+                                        className={"search-result-item"}
+                                        style={{ textDecoration: "none" }}
+                                    >
+                                        <Row className={"result-display"}>
+                                            
+                                        <Col>
+                                            <h5>{res.data.templated_pathway.pathway[i]}</h5>
+                                        </Col>
+                                        </Row>
+                                    </a>
+                                </Container>
                             );
                         }
                         this.setState({ results: result_temp });
+                        console.log(this.state.result_temp)
+                        console.log(this.state.results)
                     } else if (res.data.length === 0) {
 
                         alert("Course not found");
-                    } else {
-                        let result_temp = [];
-                        result_temp.push(<h>Tips: Click on course code to go to course detail page</h>);
-                        result_temp.push(<Label></Label>);
-                        result_temp.push(
-                            <Result
-                                course_code={res.data.course.code}
-                                course_name={res.data.course.name}
-                            ></Result>
-                        );
-                        this.setState({ results: result_temp });
-
                     }
                 } else if (res.status === 400) {
                     alert("System Error. Please refresh");
@@ -104,7 +121,7 @@ class TemplatedPathway extends Component {
                         </div>
                     </form>
                 </div>
-                {/* <div className={"search-result-display"}>{this.state.results}</div> */}
+                <div className={"search-result-display"}>{this.state.results}</div>
             </div>
         );
     }

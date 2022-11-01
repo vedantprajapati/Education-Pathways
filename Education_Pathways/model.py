@@ -1,5 +1,6 @@
 # This is the model
 
+from turtle import title
 from config import app, db
 
 
@@ -75,18 +76,21 @@ class TemplatedPathway(db.Document):
         if course_ in self.pathway:
             self.pathway.remove(course_)
             self.save()
-            
+    
+    @classmethod
+    def get(cls, title_):
+        return cls.objects(title=title_).get()
+    
     @classmethod
     def get_templated_pathway(cls, title_):
-        return TemplatedPathway.objects(title=title_).get()
-
-    def expand(self):
+        template = TemplatedPathway.objects.get(title=title_)
         ret = {
-            "title": self.title,
-            "pathway": self.pathway,
-            "comments": self.comments,
+            "title": template.title,
+            "pathway": [template.pathway[i].id for i in range(len(template.pathway))],
+            "comments": template.comments,
         }
         return ret
+
 
 # test_pathway= TemplatedPathway(title="something2",pathway=["something2"], comments="something3").save()
 class User(db.Document):

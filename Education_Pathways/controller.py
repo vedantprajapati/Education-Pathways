@@ -367,21 +367,20 @@ class UserWishlistMinorCheck(Resource):
 
 # Templated Pathways --------------------------------------------------------------
 
-
 class TemplatedPathwayDao(Resource):
     def get(self):
-        title = request.args.get("title")
+        title_ = request.args.get('title')
         try:
-            resp = jsonify(
-                {
-                    "templated_pathway": TemplatedPathway.get_templated_pathway(
-                        title_=title
-                    ).expand()
-                }
-            )
+            resp = jsonify({"templated_pathway": TemplatedPathway.get_templated_pathway(title_)})
+            print('yo')
+            print(TemplatedPathway.get_templated_pathway(title_))
+
+            print(resp)
+            print(resp.data)
             resp.status_code = 200
             return resp
         except Exception as e:
+            print(e)
             resp = jsonify({"error": "something went wrong"})
             resp.status_code = 400
             return resp
@@ -406,7 +405,7 @@ class TemplatedPathwayDao(Resource):
                     {
                         "Template Added": TemplatedPathway.get_templated_pathway(
                             title_=title
-                        ).expand()
+                        )
                     }
                 )
                 resp.status_code = 200
@@ -427,7 +426,7 @@ class TemplatedPathwayDao(Resource):
                     {
                         "Template Modified": TemplatedPathway.get_templated_pathway(
                             title_=title
-                        ).expand()
+                        )
                     }
                 )
                 resp.status_code = 200
