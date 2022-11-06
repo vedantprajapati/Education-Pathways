@@ -14,7 +14,6 @@ class TopTemplatedPathway extends Component {
             input: "",
             results: [],
         };
-        console.log("yooooo")
     }
 
     redirectCourse = (course) => {
@@ -24,21 +23,12 @@ class TopTemplatedPathway extends Component {
     };
 
     getData = (state) => {
-        console.log('sheeesh')
 
         axios
             .get(
                 `http://localhost:5000/top_templated_pathways`
             )
             .then((res) => {
-                console.log('poggers')
-                console.log(res.data.top_pathways)
-                // console.log(`it is ${res.status}`);
-                // console.log(res.data.top_pathways)
-                // console.log(res.data.top_pathways[0])
-                // // console.log(res.data.templated_pathway.comments)
-                // // console.log(res.data.title);
-                // // console.log(res.data.templated_pathway.length)
 
                 if (res.status === 200) {
                     this.setState({ results: [] });
@@ -88,14 +78,11 @@ class TopTemplatedPathway extends Component {
                     alert("System Error. Please refresh");
                 }
             })
-            .catch((err) => { console.log(err) });
 
     };
 
     componentDidMount() {
-        console.log("I ran")
         this.getData(this.state);
-        console.log(this.state.results)
     }
 
 

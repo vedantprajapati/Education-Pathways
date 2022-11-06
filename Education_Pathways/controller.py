@@ -334,9 +334,7 @@ class UserWishlistMinorCheck(Resource):
         try:
             wl = User.get_wishlist(username_=username)
             courses = [c.code for c in wl.course]
-            print(courses)
             check = Minor.check(codes_=courses)
-            print(check)
             resp = jsonify({"minorCheck": check})
             resp.status_code = 200
             return resp
@@ -353,9 +351,7 @@ class UserWishlistMinorCheck(Resource):
         try:
             wl = User.get_wishlist(username_=username)
             courses = [c.code for c in wl.course]
-            print(courses)
             check = Minor.check(codes_=courses)
-            print(check)
             resp = jsonify({"minorCheck": check})
             resp.status_code = 200
             return resp
@@ -381,16 +377,9 @@ class TemplatedPathwayDao(Resource):
             resp = jsonify(
                 {"templated_pathway": TemplatedPathway.get_templated_pathway(title_)}
             )
-            print("yo")
-            print(title_)
-            print(TemplatedPathway.get_templated_pathway(title_))
-
-            print(resp)
-            print(resp.data)
             resp.status_code = 200
             return resp
         except Exception as e:
-            print(e)
             resp = jsonify({"error": "something went wrong"})
             resp.status_code = 400
             return resp
@@ -423,7 +412,6 @@ class TemplatedPathwayDao(Resource):
             else:
 
                 courses = [Course.get(course_code) for course_code in pathway]
-                print(courses)
                 comments = (
                     comments
                     if comments
@@ -450,9 +438,6 @@ class TemplatedPathwayDao(Resource):
 class TopTemplatedPathways(Resource):
     def get(self):
         try:
-            
-            print("yo")
-            print(TemplatedPathway.objects().order_by("-count"))
             pathways = [
                 {
                     "title": tp.title,
@@ -461,14 +446,11 @@ class TopTemplatedPathways(Resource):
                 }
                 for tp in TemplatedPathway.objects()
             ]
-            print(pathways)
             resp = jsonify({"top_pathways": pathways})
             resp.status_code = 200
             
             return resp
         except Exception as e:
-            print(e)
-            print('yooooooooooooooooooooo')
             resp = jsonify({"error": "something went wrong"})
             resp.status_code = 400
             return resp
