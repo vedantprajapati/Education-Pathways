@@ -54,6 +54,7 @@ class Wishlist(db.Document):
         }
         return ret
 
+
 class TemplatedPathway(db.Document):
     title = db.StringField(required=True, unique=True)
     pathway = db.ListField(db.ReferenceField(Course))
@@ -61,9 +62,14 @@ class TemplatedPathway(db.Document):
 
     @classmethod
     def create(cls, title_, pathway_, comments_=""):
-        try:        
+        try:
             templated_pathway = cls.objects(title=title_)
-            templated_pathway.update_one(set__title=title_,set__pathway=pathway_, set__comments=comments_, upsert=True)
+            templated_pathway.update_one(
+                set__title=title_,
+                set__pathway=pathway_,
+                set__comments=comments_,
+                upsert=True,
+            )
             return True
         except:
             return False
@@ -76,11 +82,11 @@ class TemplatedPathway(db.Document):
         if course_ in self.pathway:
             self.pathway.remove(course_)
             self.save()
-    
+
     @classmethod
     def get(cls, title_):
         return cls.objects(title=title_).get()
-    
+
     @classmethod
     def get_templated_pathway(cls, title_):
         template = TemplatedPathway.objects.get(title=title_)

@@ -435,6 +435,7 @@ class TemplatedPathwayDao(Resource):
             resp.status_code = 400
             return resp
 
+
 class TopTemplatedPathways(Resource):
     def get(self):
         try:
@@ -448,7 +449,7 @@ class TopTemplatedPathways(Resource):
             ]
             resp = jsonify({"top_pathways": pathways})
             resp.status_code = 200
-            
+
             return resp
         except Exception as e:
             resp = jsonify({"error": "something went wrong"})

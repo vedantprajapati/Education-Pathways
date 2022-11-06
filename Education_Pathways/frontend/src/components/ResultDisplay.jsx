@@ -120,7 +120,7 @@ We are looking for feedback to improve Education Pathways and make it more usefu
                   <option value="MSE">Material Science Engineering</option>
                   <option value="ESC">Engineering Science</option>
                   <option value="artsci">Arts & Science</option>
-                  
+
                 </select>
               </div>
               <div>
@@ -137,19 +137,19 @@ We are looking for feedback to improve Education Pathways and make it more usefu
               <div>
                 <label for="syllabusSearch">Search For Keywords In Syllabus?</label>
                 <input
-                id="syllabusSearch"
-                type="checkbox"
-                name="syllabusSearch"
-                className={"select"}
-                checked={this.state.syllabusSearch}
-                onChange={(e) => {
-                  this.handleChange({
-                    target: {
-                      name: e.target.name,
-                      value: e.target.checked,
-                    },
-                  });
-                }}
+                  id="syllabusSearch"
+                  type="checkbox"
+                  name="syllabusSearch"
+                  className={"select"}
+                  checked={this.state.syllabusSearch}
+                  onChange={(e) => {
+                    this.handleChange({
+                      target: {
+                        name: e.target.name,
+                        value: e.target.checked,
+                      },
+                    });
+                  }}
                 />
               </div>
             </div>
