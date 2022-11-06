@@ -14,9 +14,7 @@ class TopTemplatedPathway extends Component {
             input: "",
             results: [],
         };
-        this.handleChange = this.handleChange.bind(this);
-        
-        this.getData(this.state)
+        console.log("yooooo")
     }
 
     redirectCourse = (course) => {
@@ -25,88 +23,81 @@ class TopTemplatedPathway extends Component {
         });
     };
 
-    handleChange(event) {
-        this.setState({
-            ...this.state,
-            [event.target.name]: event.target.value
-        });
-    }
-
-    handleSubmit(event) {
-        event.preventDefault();
-        this.getData(this.state);
-    }
-
     getData = (state) => {
-        if (this.state.input === "" || this.state.input === null) {
-            this.setState({ results: [] });
-        }
-        else {
-            axios
-                .get(
-                    `http://localhost:5000/top_templated_pathways`
-                )
-                .catch((e) => {
-                    console.log(e)
-                })
-                .then((res) => {
-                    console.log(this.state.input);
-                    // console.log(`it is ${res.status}`);
-                    console.log(res.data.top_pathways)
-                    console.log(res.data.top_pathways[0])
-                    // console.log(res.data.templated_pathway.comments)
-                    // console.log(res.data.title);
-                    // console.log(res.data.templated_pathway.length)
+        console.log('sheeesh')
 
-                    if (res.status === 200) {
-                        this.setState({ results: [] });
+        axios
+            .get(
+                `http://localhost:5000/top_templated_pathways`
+            )
+            .then((res) => {
+                console.log('poggers')
+                console.log(res.data.top_pathways)
+                // console.log(`it is ${res.status}`);
+                // console.log(res.data.top_pathways)
+                // console.log(res.data.top_pathways[0])
+                // // console.log(res.data.templated_pathway.comments)
+                // // console.log(res.data.title);
+                // // console.log(res.data.templated_pathway.length)
 
-                        if (res.data.top_pathways) {
+                if (res.status === 200) {
+                    this.setState({ results: [] });
+                    if (res.data.top_pathways) {
 
-                            let len = res.data.top.length;
-                            let result_temp = [];
+                        let len = res.data.top_pathways.length;
+                        let result_temp = [];
 
+                        this.setState({ results: result_temp });
+                        result_temp.push(<h2>Top Pathways</h2>);
+                        for (let i = 0; i < len; i++) {
+                            result_temp.push(
+                                <Container>
+                                    <Row className={"result-display"}>
 
-                            this.setState({ results: result_temp });
+                                        <Col>
+                                            <h5>{res.data.top_pathways[i].title}</h5>
+                                        </Col>
+                                        <Col>
+                                            <h5>{res.data.top_pathways[i].comments}</h5>
+                                        </Col>
+                                        <Col>
+                                            <ul>
+                                                {res.data.top_pathways[i].pathway.map((course) => (<li>
+                                                    <a
+                                                        href={`courseDetails/${course}`}
+                                                        className={"search-result-item"}
+                                                        style={{ textDecoration: "none" }}
+                                                    >
+                                                        {course}
+                                                    </a>
 
-                            for (let i = 0; i < len; i++) {
-                                result_temp.push(
-                                    <Container>
-                                        {/* <a
-                                        href={`courseDetails/${res.data.templated_pathway.pathway[i]}`}
-                                        className={"search-result-item"}
-                                        style={{ textDecoration: "none" }}
-                                    > */}
-                                        <Row className={"result-display"}>
-
-                                            <Col>
-                                                <h5>{res.data.templated_pathway[i].title}</h5>
-                                            </Col>
-                                            <Col>
-                                                <h5>{res.data.templated_pathway.pathway.comments}</h5>
-                                            </Col>
-                                            <Col>
-                                                <h5>
-                                                    {res.data.templated_pathway.pathway}
-                                                </h5>
-                                            </Col>
-                                        </Row>
-                                        {/* </a> */}
-                                    </Container>
-                                );
-                            }
-                            this.setState({ results: result_temp });
-                        } else if (res.data.length === 0) {
-
-                            alert("Course not found");
+                                                </li>))}
+                                            </ul>
+                                        </Col>
+                                    </Row>
+                                    {/* </a> */}
+                                </Container>
+                            );
                         }
-                    } else if (res.status === 400) {
-                        alert("System Error. Please refresh");
+                        this.setState({ results: result_temp });
+                    } else if (res.data.length === 0) {
+
+                        alert("Course not found");
                     }
-                });
-        }
+                } else if (res.status === 400) {
+                    alert("System Error. Please refresh");
+                }
+            })
+            .catch((err) => { console.log(err) });
 
     };
+
+    componentDidMount() {
+        console.log("I ran")
+        this.getData(this.state);
+        console.log(this.state.results)
+    }
+
 
     render() {
         return (

@@ -46,13 +46,6 @@ class TemplatedPathway extends Component {
                 `http://localhost:5000/templated_pathways?title=${this.state.input}`
             )
             .then((res) => {
-                console.log(this.state.input);
-                // console.log(`it is ${res.status}`);
-                console.log(res.data.templated_pathway.title)
-                console.log(res.data.templated_pathway.pathway)
-                console.log(res.data.templated_pathway.comments)
-                console.log(res.data.title);
-                console.log(res.data.templated_pathway.length)
                 
                 if (res.status === 200) {
                     this.setState({ results: [] });
@@ -63,7 +56,7 @@ class TemplatedPathway extends Component {
                         let result_temp = [];
                         result_temp.push(<h2>Pathway Name: {res.data.templated_pathway.title}</h2>);
                         result_temp.push(<p>{res.data.templated_pathway.comments}</p>);
-                        result_temp.push(<h5>Tips: Click on course code to go to course detail page</h5>);
+                        result_temp.push(<p> Tip: Click on course code to go to course detail page</p>);
                         this.setState({ results: result_temp });
                         console.log(this.state.result_temp)
                         console.log(this.state.results)

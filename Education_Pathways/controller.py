@@ -447,7 +447,6 @@ class TemplatedPathwayDao(Resource):
             resp.status_code = 400
             return resp
 
-
 class TopTemplatedPathways(Resource):
     def get(self):
         try:
@@ -473,3 +472,8 @@ class TopTemplatedPathways(Resource):
             resp = jsonify({"error": "something went wrong"})
             resp.status_code = 400
             return resp
+
+    def post(self):
+        resp = jsonify({"error": "something went wrong"})
+        resp.status_code = 400
+        return resp
