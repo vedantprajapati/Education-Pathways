@@ -11,8 +11,8 @@ class SearchResultDisplay extends Component {
     this.state = {
       input: "",
       syllabusSearch: false,
-      faculty: "",
-      courseLevel: "",
+      faculty: "all",
+      courseLevel: "all",
       results: [],
     };
     this.handleChange = this.handleChange.bind(this);
@@ -34,8 +34,8 @@ class SearchResultDisplay extends Component {
   getData = (state) => {
     axios
       .get(
-        `https://assignment-1-starter-template.herokuapp.com/searchc?input=${state.input}&faculty=${state.faculty}&courseLevel=${state.courseLevel}&syllabusSearch=${state.syllabusSearch}`
-      )
+          `https://assignment-1-starter-template.herokuapp.com/searchc?input=${state.input}&faculty=${state.faculty}&courseLevel=${state.courseLevel}&syllabusSearch=${state.syllabusSearch}`
+        )
       .then((res) => {
         console.log(`it is ${res.status}`);
         if (res.status === 200) {
@@ -126,7 +126,7 @@ We are looking for feedback to improve Education Pathways and make it more usefu
               <div>
                 <label for="courseLevels">Course Level:</label>
                 <select name="courseLevel" id="courseLevels" className={"select"} onChange={this.handleChange}>
-                  <option value="any">All</option>
+                  <option value="all">All</option>
                   <option value="100">100</option>
                   <option value="200">200</option>
                   <option value="300">300</option>

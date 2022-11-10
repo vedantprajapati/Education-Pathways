@@ -83,6 +83,10 @@ class UserLogin(Resource):
 class SearchCourse(Resource):
     def get(self):
         input = request.args.get("input")
+        faculty = request.args.get("faculty")
+        course_level = request.args.get("courseLevel")
+        syllabus_search = request.args.get("syllabusSearch")
+
         code = re.findall("[a-zA-Z]{3}\d{3}[hH]?\d?", input)
         if code:
             code = code[0].upper()
@@ -101,7 +105,17 @@ class SearchCourse(Resource):
                     return resp
         input = " ".join([nysiis(w) for w in input.split()])
         try:
-            search = Course.objects.search_text(input).order_by("$text_score")
+            course_filter = ""
+            if faculty != "all":
+                course_filter += faculty
+            if course_level != "all":
+                course_filter += course_level.replace("0", "\d")
+
+            if input == "":
+                search = Course.objects(code__regex=course_filter)[:10]
+            else:
+                search = Course.objects(code__regex=course_filter).search_text(input).order_by("$text_score")
+
             resp = jsonify(search)
             resp.status_code = 200
             return resp
