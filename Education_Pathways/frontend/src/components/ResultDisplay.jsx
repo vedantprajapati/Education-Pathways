@@ -10,7 +10,6 @@ class SearchResultDisplay extends Component {
     super();
     this.state = {
       input: "",
-      syllabusSearch: false,
       faculty: "all",
       courseLevel: "all",
       results: [],
@@ -34,7 +33,7 @@ class SearchResultDisplay extends Component {
   getData = (state) => {
     axios
       .get(
-          `https://assignment-1-starter-template.herokuapp.com/searchc?input=${state.input}&faculty=${state.faculty}&courseLevel=${state.courseLevel}&syllabusSearch=${state.syllabusSearch}`
+          `http://localhost:5000/searchc?input=${state.input}&faculty=${state.faculty}&courseLevel=${state.courseLevel}`
         )
       .then((res) => {
         console.log(`it is ${res.status}`);
@@ -133,24 +132,6 @@ We are looking for feedback to improve Education Pathways and make it more usefu
                   <option value="400">400</option>
                   <option value="500">500</option>
                 </select>
-              </div>
-              <div>
-                <label for="syllabusSearch">Search For Keywords In Syllabus?</label>
-                <input
-                  id="syllabusSearch"
-                  type="checkbox"
-                  name="syllabusSearch"
-                  className={"select"}
-                  checked={this.state.syllabusSearch}
-                  onChange={(e) => {
-                    this.handleChange({
-                      target: {
-                        name: e.target.name,
-                        value: e.target.checked,
-                      },
-                    });
-                  }}
-                />
               </div>
             </div>
           </form>

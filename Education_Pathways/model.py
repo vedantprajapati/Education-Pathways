@@ -1,6 +1,5 @@
 # This is the model
 
-from turtle import title
 from config import app, db
 
 

@@ -49,13 +49,12 @@ class TemplatedPathway extends Component {
 
                     if (res.status === 200) {
                         this.setState({ results: [] });
-
-                        if (res.data.templated_pathway) {
-
-                            let len = res.data.templated_pathway.pathway.length;
+                        if (res.data.length > 0) {
+                            let result = res.data[0]
+                            let len = result.pathway.length;
                             let result_temp = [];
-                            result_temp.push(<h2>Pathway Name: {res.data.templated_pathway.title}</h2>);
-                            result_temp.push(<p>{res.data.templated_pathway.comments}</p>);
+                            result_temp.push(<h2>Pathway Name: {result.title}</h2>);
+                            result_temp.push(<p>{result.comments}</p>);
                             result_temp.push(<p> Tip: Click on course code to go to course detail page</p>);
                             this.setState({ results: result_temp });
 
@@ -63,14 +62,14 @@ class TemplatedPathway extends Component {
                                 result_temp.push(
                                     <Container>
                                         <a
-                                            href={`courseDetails/${res.data.templated_pathway.pathway[i]}`}
+                                            href={`courseDetails/${result.pathway[i]}`}
                                             className={"search-result-item"}
                                             style={{ textDecoration: "none" }}
                                         >
                                             <Row className={"result-display"}>
 
                                                 <Col>
-                                                    <h5>{res.data.templated_pathway.pathway[i]}</h5>
+                                                    <h5>{result.pathway[i]}</h5>
                                                 </Col>
                                             </Row>
                                         </a>
@@ -78,13 +77,12 @@ class TemplatedPathway extends Component {
                                 );
                             }
                             this.setState({ results: result_temp });
-
-                        } else if (res.data.length === 0) {
-
-                            alert("Course not found");
                         }
-                    } else if (res.status === 400) {
-                        alert("System Error. Please refresh");
+                    }
+                })
+                .catch((err) => {
+                    if (err.response.status === 404) {
+                        alert(err.response.data.message)
                     }
                 });
         }
