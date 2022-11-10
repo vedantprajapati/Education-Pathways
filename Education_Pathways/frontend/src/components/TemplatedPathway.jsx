@@ -49,11 +49,8 @@ class TemplatedPathway extends Component {
 
                     if (res.status === 200) {
                         this.setState({ results: [] });
-                        console.log("FIRST")
-                        console.log(res.data)
                         if (res.data.length > 0) {
                             let result = res.data[0]
-                            console.log("SECOND")
                             let len = result.pathway.length;
                             let result_temp = [];
                             result_temp.push(<h2>Pathway Name: {result.title}</h2>);

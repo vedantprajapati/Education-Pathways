@@ -397,7 +397,6 @@ class TemplatedPathwayDao(Resource):
             resp.status_code = 200
             return resp
         except Exception as e:
-            print(e)
             resp = jsonify({"error": "something went wrong"})
             resp.status_code = 400
             return resp
