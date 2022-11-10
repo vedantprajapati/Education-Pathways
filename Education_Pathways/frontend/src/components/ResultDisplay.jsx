@@ -37,7 +37,7 @@ class SearchResultDisplay extends Component {
       //   `https://assignment-1-starter-template.herokuapp.com/searchc?input=${input}`
       // )
       .get(
-          `https://assignment-1-starter-template.herokuapp.com/searchc?input=${state.input}&faculty=${state.faculty}&courseLevel=${state.courseLevel}&syllabusSearch=${state.syllabusSearch}`
+          `http://172.19.0.2:5000/searchc?input=${state.input}&faculty=${state.faculty}&courseLevel=${state.courseLevel}&syllabusSearch=${state.syllabusSearch}`
         )
       .then((res) => {
         console.log(`it is ${res.status}`);

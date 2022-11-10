@@ -110,7 +110,11 @@ class SearchCourse(Resource):
         try:
             course_filter = ""
             if faculty != "all":
-                course_filter += faculty
+                if faculty == "artsci":
+                    # Art Sci Course Codes Should Be Fetched From Database Later (below is for demonstration purposes)
+                    course_filter = "(PHL|CSC|ANT|FAH|BCH|AST|SOC|PSY)"
+                else:
+                    course_filter += faculty
             if course_level != "all":
                 course_filter += course_level.replace("0", "\d")
 
@@ -118,6 +122,8 @@ class SearchCourse(Resource):
                 search = Course.objects(code__regex=course_filter)[:10]
             else:
                 search = Course.objects(code__regex=course_filter).search_text(input).order_by("$text_score")
+                description_search = Course.objects(description__contains=input)
+                search = search + description_search
 
             resp = jsonify(search)
             resp.status_code = 200
