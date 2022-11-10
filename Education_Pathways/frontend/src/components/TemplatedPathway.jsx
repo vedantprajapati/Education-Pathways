@@ -82,7 +82,7 @@ class TemplatedPathway extends Component {
                 })
                 .catch((err) => {
                     if (err.response.status === 404) {
-                    alert(err.response.data.message)
+                        alert(err.response.data.message)
                     }
                 });
         }
