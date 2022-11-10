@@ -88,9 +88,6 @@ class SearchCourse(Resource):
         syllabus_search = request.args.get("syllabusSearch")
 
         code = re.findall("[a-zA-Z]{3}\d{3}[hH]?\d?", input)
-        print(code)
-
-        # Return all courses if "" ?
         if code:
             code = code[0].upper()
             if len(code) == 6:
@@ -122,8 +119,6 @@ class SearchCourse(Resource):
                 search = Course.objects(code__regex=course_filter)[:10]
             else:
                 search = Course.objects(code__regex=course_filter).search_text(input).order_by("$text_score")
-                description_search = Course.objects(description__contains=input)
-                search = search + description_search
 
             resp = jsonify(search)
             resp.status_code = 200
