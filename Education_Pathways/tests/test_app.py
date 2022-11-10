@@ -1,7 +1,7 @@
 from index import app
 from minor import check_course_in_minor
 from flask.testing import FlaskClient
-
+from model import TemplatedPathway
 
 # Jean
 def test_check_course_in_minor():
@@ -32,15 +32,31 @@ def test_search_endpoint():
 
 def test_course_details_endpoint():
     tester = app.test_client()
-    response = tester.get("/course/details?code=ECE318H1")
+    response = tester.get("/course/details?code=ECE361H1")
 
     assert response.status_code == 200
 
 def test_course_graph_endpoint():
     tester = app.test_client()
-    response = tester.get("/course/graph?code=ECE318H1")
+    response = tester.get("/course/graph?code=ECE361H1")
 
     assert response.status_code == 200
+
+def test_templated_pathways():
+    Template = TemplatedPathway(title='Test_Title', comments='My_Comments',pathway=['ECE361H1', 'ECE319H1'])
+    if TemplatedPathway.objects(title='Test_Title').count() == 0:
+        Template.save()
+
+    assert Template.title == 'Test_Title'
+    assert Template.comments == 'My_Comments'
+    assert [course.id for course in Template.pathway] == ['ECE361H1', 'ECE319H1']
+    assert Template.get_templated_pathway('Test_Title') == {'title': Template.title, 'comments': Template.comments, 'pathway': [course.id for course in Template.pathway]}
+    tester = app.test_client()
+    
+    response = tester.get("/templated_pathways?title=Test_Title")
+    assert response.status_code == 200
+
+    TemplatedPathway.objects(title='Test_Title').delete()
 
 # No longer supported 
 

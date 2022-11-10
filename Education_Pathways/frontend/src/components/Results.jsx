@@ -14,7 +14,7 @@ class Result extends Component {
     super(props);
     this.state = {
       course_code: this.props.course_code,
-      course_name: this.props.course_name,
+      course_name: this.props.course_name || "",
       division: "Division of Computer Engineering",
       faculty: "Faculty of Applied Science and Engineering",
       starred: false,

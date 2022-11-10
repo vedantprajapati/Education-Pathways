@@ -334,9 +334,7 @@ class UserWishlistMinorCheck(Resource):
         try:
             wl = User.get_wishlist(username_=username)
             courses = [c.code for c in wl.course]
-            print(courses)
             check = Minor.check(codes_=courses)
-            print(check)
             resp = jsonify({"minorCheck": check})
             resp.status_code = 200
             return resp
@@ -353,9 +351,7 @@ class UserWishlistMinorCheck(Resource):
         try:
             wl = User.get_wishlist(username_=username)
             courses = [c.code for c in wl.course]
-            print(courses)
             check = Minor.check(codes_=courses)
-            print(check)
             resp = jsonify({"minorCheck": check})
             resp.status_code = 200
             return resp
@@ -363,3 +359,104 @@ class UserWishlistMinorCheck(Resource):
             resp = jsonify({"error": "something went wrong"})
             resp.status_code = 400
             return resp
+
+
+# Templated Pathways --------------------------------------------------------------
+
+
+class TemplatedPathwayDao(Resource):
+    def get(self):
+        title_ = request.args.get("title")
+        if not title_:
+            return jsonify({"error": "title is required"}), 400
+        if not TemplatedPathway.objects(title=title_):
+            resp = jsonify({"message": f"Pathway {title_} doesn't exist"})
+            resp.status_code = 404
+            return resp
+        try:
+            resp = jsonify(
+                {"templated_pathway": TemplatedPathway.get_templated_pathway(title_)}
+            )
+            resp.status_code = 200
+            return resp
+        except Exception as e:
+            resp = jsonify({"error": "something went wrong"})
+            resp.status_code = 400
+            return resp
+
+    def post(self):
+        parser = reqparse.RequestParser()
+        parser.add_argument("title", required=True)
+        parser.add_argument("pathway", required=True)
+        parser.add_argument("comments", required=False)
+        data = parser.parse_args()
+        title = data["title"]
+        pathway = data["pathway"]
+        comments = data["comments"]
+        try:
+            templated_pathway_exists = TemplatedPathway.objects(title__exists=title)
+            if not templated_pathway_exists:
+                # kajsndaks
+                templated_pathway = TemplatedPathway(
+                    title=title, pathway=pathway, comments=comments
+                )
+                resp = jsonify(
+                    {
+                        "Template Added": TemplatedPathway.get_templated_pathway(
+                            title_=title
+                        )
+                    }
+                )
+                resp.status_code = 200
+                return resp
+            else:
+
+                courses = [Course.get(course_code) for course_code in pathway]
+                comments = (
+                    comments
+                    if comments
+                    else TemplatedPathway.get_templated_pathway(title=title).comments
+                )
+                TemplatedPathway.objects(title=title).update_one(
+                    pathway=courses, comments=comments
+                )
+                resp = jsonify(
+                    {
+                        "Template Modified": TemplatedPathway.get_templated_pathway(
+                            title_=title
+                        )
+                    }
+                )
+                resp.status_code = 200
+                return resp
+
+        except Exception as e:
+            resp = jsonify({"error": "something went wrong"})
+            resp.status_code = 400
+            return resp
+
+
+class TopTemplatedPathways(Resource):
+    def get(self):
+        try:
+            pathways = [
+                {
+                    "title": tp.title,
+                    "pathway": [tp.pathway[i].id for i in range(len(tp.pathway))],
+                    "comments": tp.comments,
+                }
+                for tp in TemplatedPathway.objects()
+            ]
+            resp = jsonify({"top_pathways": pathways})
+            resp.status_code = 200
+
+            return resp
+        except Exception as e:
+            resp = jsonify({"error": "something went wrong"})
+            resp.status_code = 400
+            return resp
+
+    def post(self):
+        resp = jsonify({"error": "something went wrong"})
+        resp.status_code = 400
+        return resp
