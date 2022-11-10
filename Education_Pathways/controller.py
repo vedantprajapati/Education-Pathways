@@ -85,7 +85,6 @@ class SearchCourse(Resource):
         input = request.args.get("input")
         faculty = request.args.get("faculty")
         course_level = request.args.get("courseLevel")
-        syllabus_search = request.args.get("syllabusSearch")
 
         code = re.findall("[a-zA-Z]{3}\d{3}[hH]?\d?", input)
         if code:
@@ -387,17 +386,18 @@ class TemplatedPathwayDao(Resource):
         title_ = request.args.get("title")
         if not title_:
             return jsonify({"error": "title is required"}), 400
-        if not TemplatedPathway.objects(title=title_):
-            resp = jsonify({"message": f"Pathway {title_} doesn't exist"})
-            resp.status_code = 404
-            return resp
         try:
-            resp = jsonify(
-                {"templated_pathway": TemplatedPathway.get_templated_pathway(title_)}
-            )
+            search = TemplatedPathway.objects(title__contains=title_)[:10]
+            search = list(search) + list(TemplatedPathway.objects(comments__contains=title_)[0:10])
+            if len(search) == 0:
+                resp = jsonify({"message": f"Could not find a pathway using search: \"{title_}\""})
+                resp.status_code = 404
+                return resp
+            resp = jsonify(search)
             resp.status_code = 200
             return resp
         except Exception as e:
+            print(e)
             resp = jsonify({"error": "something went wrong"})
             resp.status_code = 400
             return resp
