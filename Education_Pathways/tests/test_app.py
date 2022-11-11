@@ -30,18 +30,6 @@ def test_search_endpoint():
 
     assert response.status_code == 200
 
-def test_course_details_endpoint():
-    tester = app.test_client()
-    response = tester.get("/course/details?code=ECE361H1")
-
-    assert response.status_code == 200
-
-def test_course_graph_endpoint():
-    tester = app.test_client()
-    response = tester.get("/course/graph?code=ECE361H1")
-
-    assert response.status_code == 200
-
 def test_templated_pathways():
     Template = TemplatedPathway(title='Test_Title', comments='My_Comments',pathway=['ECE361H1', 'ECE319H1'])
     if TemplatedPathway.objects(title='Test_Title').count() == 0:
