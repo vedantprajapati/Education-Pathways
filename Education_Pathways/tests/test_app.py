@@ -1,7 +1,7 @@
 from index import app
 from minor import check_course_in_minor
 from flask.testing import FlaskClient
-from model import TemplatedPathway
+from model import TemplatedPathway, Course
 
 # Jean
 def test_check_course_in_minor():
@@ -45,6 +45,21 @@ def test_templated_pathways():
     assert response.status_code == 200
 
     TemplatedPathway.objects(title='Test_Title').delete()
+
+# Kyle Blackie
+def test_course_search():
+    course = Course(code="ECE444", name="Software Engineering", description="Software Engineering Class", keyword="Software Engineering", graph="")
+    if Course.objects(code="ECE444", name="Software Engineering").count() == 0:
+        course.save()
+
+    tester = app.test_client()
+    
+    response = tester.get("/searchc?input=Software&faculty=ECE&courseLevel=400")
+
+    assert response.status_code == 200
+    assert b"ECE444" in response.data
+    assert b"Software Engineering" in response.data
+
 
 # No longer supported 
 
