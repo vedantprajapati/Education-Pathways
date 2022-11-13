@@ -10,12 +10,13 @@ import {
   Link,
   useLocation,
 } from "react-router-dom";
+import TemplatedPathway from "./TemplatedPathway";
 // import LogIn from "./LogIn.jsx";
 import CourseDescriptionPage from "./CourseDescription";
 // import Wishlist from './Wishlist';
 // import SignUp from './SignUp'
 import SearchResultDisplay from "./ResultDisplay";
-
+import TopTemplatedPathway from "./TopTemplatedPathways";
 function CourseDescription(props) {
   let query = useQuery();
   return <CourseDescriptionPage code={query.get("code")} />;
@@ -65,7 +66,9 @@ export default class NavbarComp extends Component {
                 <Nav.Link as={Link} to="/about">
                   About Us
                 </Nav.Link>
-
+                <Nav.Link as={Link} to="/templated_pathways">
+                  Templated Pathways
+                </Nav.Link>
                 {/* <Nav.Link href="/search" style={{ color: "white", display: "inline" }}>
                   Search
                 </Nav.Link> */}
@@ -119,6 +122,10 @@ export default class NavbarComp extends Component {
               path="/courseDetails/:code"
               render={(props) => <CourseDescriptionPage {...props} />}
             ></Route>
+            <Route path="/templated_pathways">
+              <TemplatedPathway/>
+              <TopTemplatedPathway/>
+            </Route>
             <Route path="/">
               <SearchResultDisplay />
             </Route>

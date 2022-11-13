@@ -10,6 +10,8 @@ class SearchResultDisplay extends Component {
     super();
     this.state = {
       input: "",
+      faculty: "all",
+      courseLevel: "all",
       results: [],
     };
     this.handleChange = this.handleChange.bind(this);
@@ -17,28 +19,34 @@ class SearchResultDisplay extends Component {
   }
 
   handleChange(event) {
-    this.setState({ input: event.target.value });
+    this.setState({
+      ...this.state,
+      [event.target.name]: event.target.value
+    });
   }
 
   handleSubmit(event) {
     event.preventDefault();
-    this.getData(this.state.input);
+    this.getData(this.state);
   }
 
-  getData = (input) => {
+  getData = (state) => {
     axios
       .get(
-        `https://assignment-1-starter-template.herokuapp.com/searchc?input=${input}`
-      )
+          `http://localhost:5000/searchc?input=${state.input}&faculty=${state.faculty}&courseLevel=${state.courseLevel}`
+        )
       .then((res) => {
         console.log(`it is ${res.status}`);
         if (res.status === 200) {
           this.setState({ results: [] });
 
           if (res.data.length > 0) {
+
             let len = res.data.length;
             let result_temp = [];
+            result_temp.push(<h>Tips: Click on course code to go to course detail page</h>);
             result_temp.push(<Label></Label>);
+
             for (let i = 0; i < len; i++) {
               result_temp.push(
                 <Result
@@ -49,9 +57,11 @@ class SearchResultDisplay extends Component {
             }
             this.setState({ results: result_temp });
           } else if (res.data.length === 0) {
+
             alert("Course not found");
           } else {
             let result_temp = [];
+            result_temp.push(<h>Tips: Click on course code to go to course detail page</h>);
             result_temp.push(<Label></Label>);
             result_temp.push(
               <Result
@@ -60,32 +70,13 @@ class SearchResultDisplay extends Component {
               ></Result>
             );
             this.setState({ results: result_temp });
+
           }
         } else if (res.status === 400) {
           alert("System Error. Please refresh");
         }
       });
   };
-
-  // search_render = (input) => {
-
-  //   <div className="SearchQuery">
-  //       <div style={{ marginTop: "10%" }}>
-  //           <h1> Education Pathways Search</h1>
-  //           <br></br>
-  //           <form onSubmit={this.handleSubmit} className={"search"}>
-  //               <input placeholder={"Search for course code, course name, keyword ..."} className={"text-input"} type="text" value={this.state.input} onChange={this.handleChange} />
-  //               <input type="submit" value="Submit" className={"submit-button"}/>
-  //           </form>
-  //       </div>
-
-  //       <div className={"search-result-display"} >
-  //           {this.state.results}
-  //       </div>
-
-  //     </div>
-
-  // }
 
   render() {
     return (
@@ -103,14 +94,46 @@ We are looking for feedback to improve Education Pathways and make it more usefu
 
       </div> */}
           <form onSubmit={this.handleSubmit} className={"search"}>
-            <input
-              placeholder={"Search for course code, course name, keyword ..."}
-              className={"text-input"}
-              type="text"
-              value={this.state.input}
-              onChange={this.handleChange}
-            />
-            <input type="submit" value="Search" className={"submit-button"} />
+            <div>
+              <input
+                placeholder={"Search for course code, course name, keyword ..."}
+                className={"text-input"}
+                type="text"
+                name="input"
+                value={this.state.input}
+                onChange={this.handleChange}
+              />
+              <input type="submit" value="Search" className={"submit-button"} />
+            </div>
+            <div className={"advanced-search-options"}>
+              <br></br>
+              <div>
+                <label for="faculties">Faculty:</label>
+                <select name="faculty" id="faculties" className={"select"} onChange={this.handleChange}>
+                  <option value="all">All</option>
+                  <option value="ECE">Electrical & Computer Engineering</option>
+                  <option value="CHE">Chemical Engineering</option>
+                  <option value="CIV">Civil Engineering</option>
+                  <option value="MIE">Mechanical & Industrial Engineering</option>
+                  <option value="MIN">Mineral Engineering</option>
+                  <option value="MSE">Material Science Engineering</option>
+                  <option value="ESC">Engineering Science</option>
+                  <option value="artsci">Arts & Science</option>
+
+                </select>
+              </div>
+              <div>
+                <label for="courseLevels">Course Level:</label>
+                <select name="courseLevel" id="courseLevels" className={"select"} onChange={this.handleChange}>
+                  <option value="all">All</option>
+                  <option value="100">100</option>
+                  <option value="200">200</option>
+                  <option value="300">300</option>
+                  <option value="400">400</option>
+                  <option value="500">500</option>
+                </select>
+              </div>
+            </div>
           </form>
         </div>
 

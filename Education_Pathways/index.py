@@ -30,6 +30,9 @@ api.add_resource(controller.ShowCourse, "/course/details")
 api.add_resource(controller.SyllabusHandler, "/course/syllabus")
 api.add_resource(controller.ShowCourseGraph, "/course/graph")
 
+api.add_resource(controller.TemplatedPathwayDao, "/templated_pathways")
+api.add_resource(controller.TopTemplatedPathways, "/top_templated_pathways")
+
 api.add_resource(controller.UserWishlist, "/user/wishlist")
 api.add_resource(controller.UserWishlistAdd, "/user/wishlist/addCourse")
 api.add_resource(controller.UserWishlistRemove, "/user/wishlist/removeCourse")
