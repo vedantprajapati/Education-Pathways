@@ -59,37 +59,25 @@ class AddPathwayPage extends Component {
         });
     }
 
-    handleSubmit(event) {
+    //push all courses into pathway array and post to backend
+    handleSubmit(event){
         event.preventDefault();
-        alert("A submission is made");
-                                                //temperoraly set 24 courses, subject to change
-            this.state.pathway.push(this.state.course1.value);
-            this.state.pathway.push(this.state.course2.value);
-            this.state.pathway.push(this.state.course3.value);
-            this.state.pathway.push(this.state.course4.value);
-            this.state.pathway.push(this.state.course5.value);
-            this.state.pathway.push(this.state.course6.value);
-            this.state.pathway.push(this.state.course7.value);
-            this.state.pathway.push(this.state.course8.value);
-            this.state.pathway.push(this.state.course9.value);
-            this.state.pathway.push(this.state.course10.value);
-            this.state.pathway.push(this.state.course11.value);
-            this.state.pathway.push(this.state.course12.value);
-            this.state.pathway.push(this.state.course13.value);
-            this.state.pathway.push(this.state.course14.value);
-            this.state.pathway.push(this.state.course15.value);
-            this.state.pathway.push(this.state.course16.value);
-            this.state.pathway.push(this.state.course17.value);
-            this.state.pathway.push(this.state.course18.value);
-            this.state.pathway.push(this.state.course19.value);
-            this.state.pathway.push(this.state.course20.value);
-            this.state.pathway.push(this.state.course21.value);
-            this.state.pathway.push(this.state.course22.value);
-            this.state.pathway.push(this.state.course23.value);
-            this.state.pathway.push(this.state.course24.value);
+        var joined = this.state.pathway.concat(this.state.course1, this.state.course2, this.state.course3, this.state.course4, this.state.course5, this.state.course6, this.state.course7, this.state.course8, this.state.course9, this.state.course10, this.state.course11, this.state.course12, this.state.course13, this.state.course14, this.state.course15, this.state.course16, this.state.course17, this.state.course18, this.state.course19, this.state.course20, this.state.course21, this.state.course22, this.state.course23, this.state.course24);
+        this.setState({pathway: joined});
+        this.postData(this.state);
     }
 
-    
+    postData = () => {
+        axios.post("http://localhost:5000/api/pathway", {
+            title: this.state.title,
+            pathway: this.state.pathway,
+            comments: this.state.comments
+        })
+        .then(res => {
+            console.log(res);
+            console.log(res.data);
+        })
+    }
 
     render() {
         return (
@@ -100,7 +88,7 @@ class AddPathwayPage extends Component {
                             <h1 style={{marginTop:"30px"}}>Add New Pathway</h1>
                         </Col>
                     </Row>
-                        <form className="form" onSubmit={this.handleSubmit} style={{textAlign:"center" ,borderRadius: "15px", border: "2px solid #c4c4c4"}}>
+                        <form className="form" onSubmit={this.handleSubmit} onChange={this.handleChange} style={{textAlign:"center" ,borderRadius: "15px", border: "2px solid #c4c4c4"}}>
                             <div>Pathway Title<input type={"text"} ref="title" placeholder="Pathway Title" style={{width:"600px", borderRadius: "5px", border: "2px solid #c4c4c4"}} /></div>
                             <div>
                                 Y3 H1
