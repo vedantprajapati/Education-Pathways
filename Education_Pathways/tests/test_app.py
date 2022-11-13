@@ -1,6 +1,8 @@
 from index import app
 from minor import check_course_in_minor
 from flask.testing import FlaskClient
+from model import Syllabus
+import os
 
 
 # Jean
@@ -42,6 +44,27 @@ def test_course_graph_endpoint():
 
     assert response.status_code == 200
 
+# Christian Zeni
+def test_syllabus():
+    tester = app.test_client()
+    test_file = os.path.join("Education_Pathways/tests/test_files/test.pdf")
+
+    with open(test_file, "rb") as syl:
+        response = tester.post(
+            "/course/syllabus", 
+            data={
+                "code": "TST123",
+                "file": syl
+            },
+            content_type="multipart/form-data"
+        )
+    
+    assert response.status_code == 200
+
+    response = tester.get("/course/syllabus?code=TST123")
+
+    assert response.status_code == 200
+        
 # No longer supported 
 
 # def test_user_wishlist_endpoint():

@@ -244,7 +244,6 @@ class SyllabusHandler(Resource):
         if len(request.files)!=0:
             code = request.form['code']
             file = request.files['file']
-            print(file.filename)
         else:
             resp = jsonify({"error": "Missing file"})
             resp.status_code = 400
@@ -272,12 +271,6 @@ class SyllabusHandler(Resource):
             resp = jsonify({"error": "something went wrong"})
             resp.status_code = 400
             return resp
-
-# syl = Syllabus.objects(course_code="ECE444H1").first()
-# resp = send_file(
-#                 path_or_file=syl,
-#                 mimetype="application/octet-stream",
-#                 as_attachment=True)
 
 # ------------------------------------------------------------
 
