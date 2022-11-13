@@ -165,3 +165,7 @@ class Minor(db.Document):
             if yes:
                 ret.append(mn)
         return ret
+
+class Syllabus(db.Document):
+    course_code = db.StringField(required=True, unique=True)
+    file = db.FileField(required=True)

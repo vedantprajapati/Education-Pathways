@@ -8,6 +8,7 @@ import requisite_label from "./img/requisite-label.png";
 import empty_star from "./img/star.png";
 import starred from "./img/starred.png";
 import axios from "axios";
+import ViewUploadSyllabus from "./ViewUploadSyllabus";
 
 let star = empty_star;
 
@@ -134,10 +135,8 @@ class CourseDescriptionPage extends Component {
               <p>{this.state.department}</p>
             </Col>
             <Col className="col-item">
-              <h3>Past Tests and Syllabi</h3>
-              <button className={"syllabus-link"} onClick={this.openLink}>
-                View
-              </button>
+              <h3>Syllabus</h3>
+              <ViewUploadSyllabus code={this.state.course_code} />
             </Col>
           </Row>
           <Row className="col-item course-description">

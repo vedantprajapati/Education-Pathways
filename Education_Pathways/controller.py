@@ -1,12 +1,15 @@
 # this is the controller
 
-from flask import jsonify, request
+from flask import jsonify, request, send_file
 from flask_restful import Resource, reqparse
 
 # from flask_cors import cross_origin
 from config import app
 from model import *
 from fuzzy import nysiis
+import werkzeug
+from werkzeug.datastructures import FileStorage
+from werkzeug.utils import secure_filename
 import re
 
 
@@ -229,6 +232,62 @@ class ShowCourseGraph(Resource):
             resp.status_code = 400
             return resp
 
+class SyllabusHandler(Resource):
+    def get(self):
+        code = request.args.get("code")
+        syl = Syllabus.objects(course_code=code)
+
+        if not syl: 
+            resp = jsonify({"error": f"No syllabus for {code}"})
+            resp.status_code =400
+            return resp
+        try:
+            syl = syl.first().file
+            resp = send_file(
+                path_or_file=syl,
+                mimetype="application/octet-stream",
+                as_attachment=True,
+                download_name=f"{code}_Syllabus")
+            return resp
+        except Exception as e:
+            resp = jsonify({"error": "something went wrong"})
+            resp.status_code = 400
+            print(e)
+            return resp  
+       
+    def post(self):
+
+        # Make sure file isn't empty
+        if len(request.files)!=0:
+            code = request.form['code']
+            file = request.files['file']
+        else:
+            resp = jsonify({"error": "Missing file"})
+            resp.status_code = 400
+            return resp
+
+        # Ensure correct file type
+        if (file.filename).rsplit(".", 1)[1].lower() != "pdf":
+                resp = jsonify({"error": "Invalid file type"})
+                resp.status_code = 400
+                return resp
+        
+        try:
+            syl = Syllabus.objects(course_code=code).first()
+            if syl:
+                syl.file.replace(file)
+                syl.save()
+            else:
+                syl = Syllabus(course_code=code)
+                syl.file.put(file)
+                syl.save()
+            resp = jsonify({"message": f"Added syllabus to {code}"})
+            resp.status_code = 200
+            return resp
+        except Exception as e:
+            resp = jsonify({"error": "something went wrong"})
+            resp.status_code = 400
+            return resp
 
 # ------------------------------------------------------------
 

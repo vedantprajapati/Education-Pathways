@@ -27,6 +27,7 @@ api.add_resource(controller.UserLogin, "/user/login")
 
 api.add_resource(controller.SearchCourse, "/searchc")
 api.add_resource(controller.ShowCourse, "/course/details")
+api.add_resource(controller.SyllabusHandler, "/course/syllabus")
 api.add_resource(controller.ShowCourseGraph, "/course/graph")
 
 api.add_resource(controller.TemplatedPathwayDao, "/templated_pathways")
