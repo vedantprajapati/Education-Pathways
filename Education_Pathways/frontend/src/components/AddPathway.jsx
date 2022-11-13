@@ -62,14 +62,63 @@ class AddPathwayPage extends Component {
 
     handleSave(event){
         event.preventDefault();
-        var joined = this.state.pathway.concat(this.state.course1, this.state.course2, this.state.course3, this.state.course4, this.state.course5, this.state.course6, this.state.course7, this.state.course8, this.state.course9, this.state.course10, this.state.course11, this.state.course12, this.state.course13, this.state.course14, this.state.course15, this.state.course16, this.state.course17, this.state.course18, this.state.course19, this.state.course20, this.state.course21, this.state.course22, this.state.course23, this.state.course24);
+        var joined = [];
+        // this.state.pathway.concat(this.state.course1, this.state.course2, this.state.course3, this.state.course4, this.state.course5, this.state.course6, this.state.course7, this.state.course8, this.state.course9, this.state.course10, this.state.course11, this.state.course12, this.state.course13, this.state.course14, this.state.course15, this.state.course16, this.state.course17, this.state.course18, this.state.course19, this.state.course20, this.state.course21, this.state.course22, this.state.course23, this.state.course24);
+        if(this.state.course1 != ""){joined.push(this.state.course1);}
+        if(this.state.course2 != ""){joined.push(this.state.course2);}
+        if(this.state.course3 != ""){joined.push(this.state.course3);}
+        if(this.state.course4 != ""){joined.push(this.state.course4);}
+        if(this.state.course5 != ""){joined.push(this.state.course5);}
+        if(this.state.course6 != ""){joined.push(this.state.course6);}
+        if(this.state.course7 != ""){joined.push(this.state.course7);}
+        if(this.state.course8 != ""){joined.push(this.state.course8);}
+        if(this.state.course9 != ""){joined.push(this.state.course9);}
+        if(this.state.course10 != ""){joined.push(this.state.course10);}
+        if(this.state.course11 != ""){joined.push(this.state.course11);}
+        if(this.state.course12 != ""){joined.push(this.state.course12);}
+        if(this.state.course13 != ""){joined.push(this.state.course13);}
+        if(this.state.course14 != ""){joined.push(this.state.course14);}
+        if(this.state.course15 != ""){joined.push(this.state.course15);}
+        if(this.state.course16 != ""){joined.push(this.state.course16);}
+        if(this.state.course17 != ""){joined.push(this.state.course17);}
+        if(this.state.course18 != ""){joined.push(this.state.course18);}
+        if(this.state.course19 != ""){joined.push(this.state.course19);}
+        if(this.state.course20 != ""){joined.push(this.state.course20);}
+        if(this.state.course21 != ""){joined.push(this.state.course21);}
+        if(this.state.course22 != ""){joined.push(this.state.course22);}
+        if(this.state.course23 != ""){joined.push(this.state.course23);}
+        if(this.state.course24 != ""){joined.push(this.state.course24);}
         this.setState({pathway: joined});
     }
 
     //push all courses into pathway array and post to backend
     handleSubmit(event){
         event.preventDefault();
-        var joined = this.state.pathway.concat(this.state.course1, this.state.course2, this.state.course3, this.state.course4, this.state.course5, this.state.course6, this.state.course7, this.state.course8, this.state.course9, this.state.course10, this.state.course11, this.state.course12, this.state.course13, this.state.course14, this.state.course15, this.state.course16, this.state.course17, this.state.course18, this.state.course19, this.state.course20, this.state.course21, this.state.course22, this.state.course23, this.state.course24);
+        var joined = [];
+        if(this.state.course1 != ""){joined.push(this.state.course1);}
+        if(this.state.course2 != ""){joined.push(this.state.course2);}
+        if(this.state.course3 != ""){joined.push(this.state.course3);}
+        if(this.state.course4 != ""){joined.push(this.state.course4);}
+        if(this.state.course5 != ""){joined.push(this.state.course5);}
+        if(this.state.course6 != ""){joined.push(this.state.course6);}
+        if(this.state.course7 != ""){joined.push(this.state.course7);}
+        if(this.state.course8 != ""){joined.push(this.state.course8);}
+        if(this.state.course9 != ""){joined.push(this.state.course9);}
+        if(this.state.course10 != ""){joined.push(this.state.course10);}
+        if(this.state.course11 != ""){joined.push(this.state.course11);}
+        if(this.state.course12 != ""){joined.push(this.state.course12);}
+        if(this.state.course13 != ""){joined.push(this.state.course13);}
+        if(this.state.course14 != ""){joined.push(this.state.course14);}
+        if(this.state.course15 != ""){joined.push(this.state.course15);}
+        if(this.state.course16 != ""){joined.push(this.state.course16);}
+        if(this.state.course17 != ""){joined.push(this.state.course17);}
+        if(this.state.course18 != ""){joined.push(this.state.course18);}
+        if(this.state.course19 != ""){joined.push(this.state.course19);}
+        if(this.state.course20 != ""){joined.push(this.state.course20);}
+        if(this.state.course21 != ""){joined.push(this.state.course21);}
+        if(this.state.course22 != ""){joined.push(this.state.course22);}
+        if(this.state.course23 != ""){joined.push(this.state.course23);}
+        if(this.state.course24 != ""){joined.push(this.state.course24);}
         this.setState({pathway: joined});
         // this.setState({course1: "", course2: "", course3: "", course4: "", course5: "", course6: "", course7: "", course8: "", course9: "", course10: "", course11: "", course12: "", course13: "", course14: "", course15: "", course16: "", course17: "", course18: "", course19: "", course20: "", course21: "", course22: "", course23: "", course24: ""});
         this.postData(this.state);
@@ -87,16 +136,48 @@ class AddPathwayPage extends Component {
             pathway: this.state.pathway,
             comments: this.state.comments
         }
-        axios("http://localhost:5000/templatedpathways/templatedpathwaydao",
-            {
-                method: "POST", 
-                headers: {"Content-Type": "application/json"},
-                data: JSON.stringify(payload)})
-        .then(res => {
-            console.log(res);
-            console.log(res.data);
-        })
+        // axios("http://localhost:5000/templatedpathways/templatedpathwaydao",
+        //     {
+        //         method: "POST", 
+        //         headers: {"Content-Type": "application/json"},
+        //         data: JSON.stringify(payload)})
+        // .then(res => {
+        //     console.log(res);
+        //     console.log(res.data);
+        // })
+        // .catch(error => {
+        //     console.log('response: ', error.response.data);
+        //   });
+
+        // let formData = new FormData();
+        // formData.append('title', this.state.title);
+        // formData.append('pathway', this.state.pathway);
+        // formData.append('comments', this.state.comments);
+
+        // axios.post('http://localhost:5000/templatedpathways/templatedpathwaydao', formData, { 
+        //     headers: {'Content-Type': 'multipart/form-data'}
+        // })
+        // .then((res) => {
+        //     console.log(res.data);
+        //     alert(res.data.message)
+        // })
+        // .catch(function (error) {
+        //     console.log(error.response)
+        //     alert(error.response.data.error);
+        // });
+
+        fetch("http://localhost:5000/templatedpathways/templatedpathwaydao", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(payload)
+        }
+        // .then(res => {res.json()})
+        // .then(data => { console.log(data) })
+        // .catch(error => { console.log(error) })
+        )
+    
     }
+
 
     render() {
         return (
