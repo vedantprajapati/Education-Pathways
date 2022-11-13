@@ -1,5 +1,8 @@
 # this is the flask core
 
+import sys
+sys.path.append('D:\\UofT\\ECE444\\project-1-web-application-design-education-pathways-group-10-x-engineers\\Education_Pathways')
+
 from flask import Flask, send_from_directory
 from flask_restful import Api
 import os

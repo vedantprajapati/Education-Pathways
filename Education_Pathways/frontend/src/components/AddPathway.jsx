@@ -47,6 +47,7 @@ class AddPathwayPage extends Component {
         }
         this.handleSubmit = this.handleSubmit.bind(this);
         this.handleChange = this.handleChange.bind(this);
+        this.handleSave = this.handleSave.bind(this);
     }
 
     handleChange(event){
@@ -59,20 +60,38 @@ class AddPathwayPage extends Component {
         });
     }
 
+    handleSave(event){
+        event.preventDefault();
+        var joined = this.state.pathway.concat(this.state.course1, this.state.course2, this.state.course3, this.state.course4, this.state.course5, this.state.course6, this.state.course7, this.state.course8, this.state.course9, this.state.course10, this.state.course11, this.state.course12, this.state.course13, this.state.course14, this.state.course15, this.state.course16, this.state.course17, this.state.course18, this.state.course19, this.state.course20, this.state.course21, this.state.course22, this.state.course23, this.state.course24);
+        this.setState({pathway: joined});
+    }
+
     //push all courses into pathway array and post to backend
     handleSubmit(event){
         event.preventDefault();
         var joined = this.state.pathway.concat(this.state.course1, this.state.course2, this.state.course3, this.state.course4, this.state.course5, this.state.course6, this.state.course7, this.state.course8, this.state.course9, this.state.course10, this.state.course11, this.state.course12, this.state.course13, this.state.course14, this.state.course15, this.state.course16, this.state.course17, this.state.course18, this.state.course19, this.state.course20, this.state.course21, this.state.course22, this.state.course23, this.state.course24);
         this.setState({pathway: joined});
+        // this.setState({course1: "", course2: "", course3: "", course4: "", course5: "", course6: "", course7: "", course8: "", course9: "", course10: "", course11: "", course12: "", course13: "", course14: "", course15: "", course16: "", course17: "", course18: "", course19: "", course20: "", course21: "", course22: "", course23: "", course24: ""});
         this.postData(this.state);
+        this.setState({pathway: []});
     }
 
     postData = () => {
-        axios.post("http://localhost:5000/api/pathway", {
+        // axios.post("http://localhost:5000/templatedpathways/templatedpathwaydao", {
+        //     title: this.state.title,
+        //     pathway: this.state.pathway,
+        //     comments: this.state.comments
+        // })
+        let payload = {
             title: this.state.title,
             pathway: this.state.pathway,
             comments: this.state.comments
-        })
+        }
+        axios("http://localhost:5000/templatedpathways/templatedpathwaydao",
+            {
+                method: "POST", 
+                headers: {"Content-Type": "application/json"},
+                data: JSON.stringify(payload)})
         .then(res => {
             console.log(res);
             console.log(res.data);
@@ -87,9 +106,10 @@ class AddPathwayPage extends Component {
                         <Col>
                             <h1 style={{marginTop:"30px"}}>Add New Pathway</h1>
                         </Col>
+                        <h5>Please Save your work before submit!</h5>
                     </Row>
                         <form className="form" onSubmit={this.handleSubmit} onChange={this.handleChange} style={{textAlign:"center" ,borderRadius: "15px", border: "2px solid #c4c4c4"}}>
-                            <div>Pathway Title<input type={"text"} ref="title" placeholder="Pathway Title" style={{width:"600px", borderRadius: "5px", border: "2px solid #c4c4c4"}} /></div>
+                            <div>Pathway Title<input name="title" type={"text"} ref="title" placeholder="Pathway Title" style={{width:"600px", borderRadius: "5px", border: "2px solid #c4c4c4"}} /></div>
                             <div>
                                 Y3 H1
                                 <input name="course1" type={"text"} ref="course1" placeholder="course1" style={{width:"100px", margin:"5px", borderRadius: "5px", border: "2px solid #c4c4c4"}}/>
@@ -125,9 +145,10 @@ class AddPathwayPage extends Component {
                                 <input name="course23" type={"text"} ref="course23" placeholder="course23" style={{width:"100px", margin:"5px", borderRadius: "5px", border: "2px solid #c4c4c4"}}/>
                                 <input name="course24" type={"text"} ref="course24" placeholder="course24" style={{width:"100px", margin:"5px", borderRadius: "5px", border: "2px solid #c4c4c4"}}/>
                             </div>
-                            <div>Comments<input type={"text"} ref="comment" placeholder="comments" style={{width:"600px", borderRadius: "5px", border: "2px solid #c4c4c4"}} /></div>
+                            <div>Comments<input name="comments" type={"text"} ref="comments" placeholder="comments" style={{width:"600px", borderRadius: "5px", border: "2px solid #c4c4c4"}} /></div>
                             <br></br>
-                            <button type="submit">Submit</button>
+                            <button type="save" onClick={this.handleSave} class="submit-button">Save</button>
+                            <button type="submit" onClick={this.handleSubmit} class="submit-button">Submit</button>
                         </form>
                 </Container>
             </div>
