@@ -393,47 +393,69 @@ class TemplatedPathwayDao(Resource):
         parser.add_argument("comments", required=False)
         data = parser.parse_args()
         title = data["title"]
+        pathway = [] 
         pathway = data["pathway"]
         comments = data["comments"]
+        # print(title, pathway, comments)
         try:
-            templated_pathway_exists = TemplatedPathway.objects(title__exists=title)
+            # templated_pathway_exists = TemplatedPathway.objects(title__exists=title)
+            # define a new variable detecting if the templated pathway exists
+            templated_pathway_exists = TemplatedPathway.objects(title=title)          
+            print(not templated_pathway_exists)
+            # print(templated_pathway_exists["TemplatePathway"])
             if not templated_pathway_exists:
                 # kajsndaks
+                print("not templated pathway exists")
                 templated_pathway = TemplatedPathway(
                     title=title, pathway=pathway, comments=comments
                 )
-                resp = jsonify(
-                    {
-                        "Template Added": TemplatedPathway.get_templated_pathway(
-                            title_=title
-                        ).expand()
-                    }
-                )
+                print("templated pathway created")
+                # resp = jsonify(
+                #     {
+                #         "Template Added": TemplatedPathway.get_templated_pathway(
+                #             title_=title
+                #         ).expand()
+                #     }
+                # )
+                resp= jsonify({"Template Added": templated_pathway.expand()})
+                print("jsonified, resp: ", resp)
                 resp.status_code = 200
+                print("status code 200")
+                templated_pathway.save(validate=False, force_insert=True)
+                print("templated pathway saved")
                 return resp
             else:
-
-                courses = [Course.get(course_code) for course_code in pathway]
-                print(courses)
+                print("templated pathway exists")
+                # courses = TemplatedPathway.get_templated_pathway(title=title)["Pathway"]
+                courses = []
+                courses = pathway
+                # courses = [Course.get(course_code) for course_code in pathway]
+                # get the courses from the pathway
+                # courses = [Course.get(course_code) for course_code in pathway]
+                print("courses: ", courses)
+                # print(courses)
                 comments = (
                     comments
                     if comments
-                    else TemplatedPathway.get_templated_pathway(title=title).comments
+                    else TemplatedPathway.get_templated_pathway(title=title)["comments"]
                 )
-                TemplatedPathway.objects(title=title).update_one(
-                    pathway=courses, comments=comments
-                )
-                resp = jsonify(
-                    {
-                        "Template Modified": TemplatedPathway.get_templated_pathway(
-                            title_=title
-                        ).expand()
-                    }
-                )
+                print("comments: ", comments)
+                # TemplatedPathway.objects(title=title).update_one(
+                #     pathway=courses, comments=comments
+                # )
+                # update the pathway and comments
+                templated_pathway = TemplatedPathway(title=title, pathway=courses, comments=comments)
+                print("templated pathway updated")
+                resp= jsonify({"Template Modified": templated_pathway.expand()})
+                print("jsonified, resp: ", resp)
                 resp.status_code = 200
+                print("status code 200")
+                templated_pathway.save(validate=True, force_insert=False)
+                print("templated pathway updated")
                 return resp
 
         except Exception as e:
+            print(e.with_traceback)
             resp = jsonify({"error": "something went wrong"})
             resp.status_code = 400
             return resp
