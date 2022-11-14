@@ -16,6 +16,7 @@ class SearchResultDisplay extends Component {
     };
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.handleRandom = this.handleRandom.bind(this);
   }
 
   handleChange(event) {
@@ -28,6 +29,12 @@ class SearchResultDisplay extends Component {
   handleSubmit(event) {
     event.preventDefault();
     this.getData(this.state);
+  }
+
+  // handle random button click action and get data from backend api, and pick one result randomly
+  handleRandom(event) {
+    event.preventDefault();
+    this.getRandomData(this.state);
   }
 
   getData = (state) => {
@@ -78,6 +85,52 @@ class SearchResultDisplay extends Component {
       });
   };
 
+  getRandomData = (state) => {
+      axios
+        .get(`http://localhost:5000/searchc?input=${state.input}&faculty=${state.faculty}&courseLevel=${state.courseLevel}`
+        )
+      .then((res) => {
+        console.log(`it is ${res.status}`);
+        if (res.status === 200) {
+          this.setState({ results: [] });
+
+          if (res.data.length > 0) {
+
+            let len = res.data.length;
+            let result_temp = [];
+            result_temp.push(<h>Tips: Click on course code to go to course detail page</h>);
+            result_temp.push(<Label></Label>);
+            let randomResult = res.data[Math.floor(Math.random() * res.data.length)];
+              result_temp.push(
+                <Result
+                  course_code={randomResult.code}
+                  course_name={randomResult.name}
+                ></Result>
+              );
+
+            this.setState({ results: result_temp });
+          } else if (res.data.length === 0) {
+
+            alert("Course not found");
+          } else {
+            let result_temp = [];
+            result_temp.push(<h>Tips: Click on course code to go to course detail page</h>);
+            result_temp.push(<Label></Label>);
+            result_temp.push(
+              <Result
+                course_code={res.data.course.code}
+                course_name={res.data.course.name}
+              ></Result>
+            );
+            this.setState({ results: result_temp });
+
+          }
+        } else if (res.status === 400) {
+          alert("System Error. Please refresh");
+        }
+      });
+  }
+
   render() {
     return (
       <div className="SearchQuery">
@@ -103,7 +156,8 @@ We are looking for feedback to improve Education Pathways and make it more usefu
                 value={this.state.input}
                 onChange={this.handleChange}
               />
-              <input type="submit" value="Search" className={"submit-button"} />
+              <input type="submit" value="Search" className={"submit-button"} onClick={this.handleSubmit}/>
+              <input type="submit" value="Random" className={"submit-button"} onClick={this.handleRandom}/> 
             </div>
             <div className={"advanced-search-options"}>
               <br></br>
