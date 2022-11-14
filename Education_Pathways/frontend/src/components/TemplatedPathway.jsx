@@ -25,11 +25,11 @@ class TemplatedPathway extends Component {
     };
 
     handleChange(event) {
-        this.setState({
-            ...this.state,
-            [event.target.name]: event.target.value
-        });
-    }
+
+        this.setState({...this.state, input: event.target.value});
+        this.getData({...this.state, input: event.target.value});
+    
+      }
 
     handleSubmit(event) {
         event.preventDefault();
@@ -50,39 +50,43 @@ class TemplatedPathway extends Component {
                     if (res.status === 200) {
                         this.setState({ results: [] });
                         if (res.data.length > 0) {
-                            let result = res.data[0]
-                            let len = result.pathway.length;
-                            let result_temp = [];
-                            result_temp.push(<h2>Pathway Name: {result.title}</h2>);
-                            result_temp.push(<p>{result.comments}</p>);
-                            result_temp.push(<p> Tip: Click on course code to go to course detail page</p>);
-                            this.setState({ results: result_temp });
+                            if (this.state.input == state.input) {
+                                this.setState({...this.state, results: []});
+                                let result = res.data[0]
+                                let len = result.pathway.length;
+                                let result_temp = [];
+                                result_temp.push(<h2>Pathway Name: {result.title}</h2>);
+                                result_temp.push(<p>{result.comments}</p>);
+                                result_temp.push(<p> Tip: Click on course code to go to course detail page</p>);
+                                this.setState({ results: result_temp });
 
-                            for (let i = 0; i < len; i++) {
-                                result_temp.push(
-                                    <Container>
-                                        <a
-                                            href={`courseDetails/${result.pathway[i]}`}
-                                            className={"search-result-item"}
-                                            style={{ textDecoration: "none" }}
-                                        >
-                                            <Row className={"result-display"}>
+                                for (let i = 0; i < len; i++) {
+                                    result_temp.push(
+                                        <Container>
+                                            <a
+                                                href={`courseDetails/${result.pathway[i]}`}
+                                                className={"search-result-item"}
+                                                style={{ textDecoration: "none" }}
+                                            >
+                                                <Row className={"result-display"}>
 
-                                                <Col>
-                                                    <h5>{result.pathway[i]}</h5>
-                                                </Col>
-                                            </Row>
-                                        </a>
-                                    </Container>
-                                );
+                                                    <Col>
+                                                        <h5>{result.pathway[i]}</h5>
+                                                    </Col>
+                                                </Row>
+                                            </a>
+                                        </Container>
+                                    );
+                                }
+                                this.setState({ results: result_temp });
                             }
-                            this.setState({ results: result_temp });
                         }
                     }
                 })
                 .catch((err) => {
                     if (err.response.status === 404) {
-                        alert(err.response.data.message)
+                        this.state.results = [];
+                        console.log(err.response.data.message)
                     }
                 });
         }
@@ -108,11 +112,12 @@ class TemplatedPathway extends Component {
                                 value={this.state.input}
                                 onChange={this.handleChange}
                             />
-                            <input type="submit" value="Search" className={"submit-button"} />
                         </div>
                     </form>
                 </div>
-                <div className={"search-result-display"}>{this.state.results}</div>
+                <div className={"search-result-display"} >
+                    {this.state.results.length > 0 || this.state.input === "" ? this.state.results : <div> No pathways found </div>}
+                </div>
             </div>
         );
     }
