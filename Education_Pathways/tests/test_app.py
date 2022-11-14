@@ -1,6 +1,8 @@
 from index import app
 from minor import check_course_in_minor
 from flask.testing import FlaskClient
+import os
+from model import TemplatedPathway, Course, Syllabus
 
 
 # Jean
@@ -30,18 +32,58 @@ def test_search_endpoint():
 
     assert response.status_code == 200
 
-def test_course_details_endpoint():
-    tester = app.test_client()
-    response = tester.get("/course/details?code=ECE318H1")
+def test_templated_pathways():
+    Template = TemplatedPathway(title='Test_Title', comments='My_Comments',pathway=['ECE361H1', 'ECE319H1'])
+    if TemplatedPathway.objects(title='Test_Title').count() == 0:
+        Template.save()
 
+    assert Template.title == 'Test_Title'
+    assert Template.comments == 'My_Comments'
+    assert [course.id for course in Template.pathway] == ['ECE361H1', 'ECE319H1']
+    assert Template.get_templated_pathway('Test_Title') == {'title': Template.title, 'comments': Template.comments, 'pathway': [course.id for course in Template.pathway]}
+    tester = app.test_client()
+    
+    response = tester.get("/templated_pathways?title=Test_Title")
     assert response.status_code == 200
 
-def test_course_graph_endpoint():
+    TemplatedPathway.objects(title='Test_Title').delete()
+
+# Kyle Blackie
+def test_course_search():
+    course = Course(code="ECE444", name="Software Engineering", description="Software Engineering Class", keyword="Software Engineering", graph="")
+    if Course.objects(code="ECE444", name="Software Engineering").count() == 0:
+        course.save()
+
     tester = app.test_client()
-    response = tester.get("/course/graph?code=ECE318H1")
+    
+    response = tester.get("/searchc?input=Software&faculty=ECE&courseLevel=400")
 
     assert response.status_code == 200
+    assert b"ECE444" in response.data
+    assert b"Software Engineering" in response.data
 
+
+# Christian Zeni
+def test_syllabus():
+    tester = app.test_client()
+    test_file = os.path.join("Education_Pathways/tests/test_files/test.pdf")
+
+    with open(test_file, "rb") as syl:
+        response = tester.post(
+            "/course/syllabus", 
+            data={
+                "code": "TST123",
+                "file": syl
+            },
+            content_type="multipart/form-data"
+        )
+    
+    assert response.status_code == 200
+
+    response = tester.get("/course/syllabus?code=TST123")
+
+    assert response.status_code == 200
+        
 # No longer supported 
 
 # def test_user_wishlist_endpoint():
