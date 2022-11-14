@@ -89,54 +89,18 @@ class AddPathwayPage extends Component {
     }
 
     postData = () => {
-        // axios.post("http://localhost:5000/templatedpathways/templatedpathwaydao", {
-        //     title: this.state.title,
-        //     pathway: this.state.pathway,
-        //     comments: this.state.comments
-        // })
+
         let payload = {
             title: this.state.title,
             pathway: this.state.pathway,
             comments: this.state.comments
         }
-        // axios("http://localhost:5000/templatedpathways/templatedpathwaydao",
-        //     {
-        //         method: "POST", 
-        //         headers: {"Content-Type": "application/json"},
-        //         data: JSON.stringify(payload)})
-        // .then(res => {
-        //     console.log(res);
-        //     console.log(res.data);
-        // })
-        // .catch(error => {
-        //     console.log('response: ', error.response.data);
-        //   });
-
-        // let formData = new FormData();
-        // formData.append('title', this.state.title);
-        // formData.append('pathway', this.state.pathway);
-        // formData.append('comments', this.state.comments);
-
-        // axios.post('http://localhost:5000/templatedpathways/templatedpathwaydao', formData, { 
-        //     headers: {'Content-Type': 'multipart/form-data'}
-        // })
-        // .then((res) => {
-        //     console.log(res.data);
-        //     alert(res.data.message)
-        // })
-        // .catch(function (error) {
-        //     console.log(error.response)
-        //     alert(error.response.data.error);
-        // });
-
         fetch("http://localhost:5000/templated_pathways", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(payload)
         }
-        // .then(res => {res.json()})
-        // .then(data => { console.log(data) })
-        // .catch(error => { console.log(error) })
+
         )
     
     }
