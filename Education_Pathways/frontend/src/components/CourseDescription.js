@@ -32,6 +32,8 @@ class CourseDescriptionPage extends Component {
       graphics: [],
       username: localStorage.getItem("username"),
     };
+
+    this.state.course_code = props.match.params.code;
   }
 
   componentDidMount() {
@@ -176,6 +178,9 @@ class CourseDescriptionPage extends Component {
             </Row>
           </Row>
         </Container>
+        <div>
+          <a href="mailto:immunearmy@gmail.com">Report This Page</a>
+        </div>
       </div>
     );
   }
