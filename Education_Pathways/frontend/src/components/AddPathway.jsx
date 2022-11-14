@@ -64,7 +64,6 @@ class AddPathwayPage extends Component {
         event.preventDefault();
         var joined = [];
         var i;
-        // this.state.pathway.concat(this.state.course1, this.state.course2, this.state.course3, this.state.course4, this.state.course5, this.state.course6, this.state.course7, this.state.course8, this.state.course9, this.state.course10, this.state.course11, this.state.course12, this.state.course13, this.state.course14, this.state.course15, this.state.course16, this.state.course17, this.state.course18, this.state.course19, this.state.course20, this.state.course21, this.state.course22, this.state.course23, this.state.course24);
         for(i=1; i<=24; i++){
             if(this.state["course"+i] != ""){
                 joined.push(this.state["course"+i]);
