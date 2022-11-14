@@ -470,64 +470,27 @@ class TemplatedPathwayDao(Resource):
         pathway = [] 
         pathway = data["pathway"]
         comments = data["comments"]
-        # print(title, pathway, comments)
-        # print(data["pathway"])
+
         try:
-            # templated_pathway_exists = TemplatedPathway.objects(title__exists=title)
-            # define a new variable detecting if the templated pathway exists
+
             templated_pathway_exists = TemplatedPathway.objects(title=title)          
-            # print(not templated_pathway_exists)
-            # print(templated_pathway_exists["TemplatePathway"])
+
             if not templated_pathway_exists:
-                # kajsndaks
-                # print("not templated pathway exists")
+
                 templated_pathway = TemplatedPathway(
                     title=title, pathway=pathway, comments=comments
                 )
-                # print("templated pathway created")
-                # resp = jsonify(
-                #     {
-                #         "Template Added": TemplatedPathway.get_templated_pathway(
-                #             title_=title
-                #         ).expand()
-                #     }
-                # )
+
                 resp= jsonify({"Template Added": "templated pathway created"})
-                # resp = jsonify({"Template Added"})
-                # print("jsonified, resp: ", resp)
+
                 resp.status_code = 200
-                # print("status code 200")
                 templated_pathway.save(validate=False, force_insert=True)
-                # print("templated pathway saved")
                 return resp
             else:
-                # print("templated pathway exists")
-                # # courses = TemplatedPathway.get_templated_pathway(title=title)["Pathway"]
-                # courses = []
-                # courses = pathway
-                # # courses = [Course.get(course_code) for course_code in pathway]
-                # # get the courses from the pathway
-                # # courses = [Course.get(course_code) for course_code in pathway]
-                # print("courses: ", courses)
-                # # print(courses)
-                # comments = (
-                #     comments
-                #     if comments
-                #     else TemplatedPathway.get_templated_pathway(title=title)["comments"]
-                # )
-                # print("comments: ", comments)
-                # TemplatedPathway.objects(title=title).update_one(
-                #     pathway=courses, comments=comments
-                # )
-                # update the pathway and comments
-                # templated_pathway = TemplatedPathway(title=title, pathway=courses, comments=comments)
-                # print("templated pathway updated")
+                
                 resp= jsonify("Template with same name already exisits. Please use a different name.")
-                # print("jsonified, resp: ", resp)
                 resp.status_code = 200
-                # print("status code 200")
-                # templated_pathway.save(validate=True, force_insert=False)
-                # print("templated pathway updated")
+
                 return resp
 
         except Exception as e:
