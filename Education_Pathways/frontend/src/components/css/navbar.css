@@ -28,3 +28,38 @@
   margin-top: 170px;
   margin-bottom: 10px;
 }
+
+
+.dot {
+  height: 25px;
+  width: 25px;
+  border-radius: 50%;
+  display: inline-block;
+  cursor: pointer;
+  margin: 5px;
+}
+
+#blue {
+  background-color: #1c3e6f;
+}
+
+
+#black {
+  background-color: gray;
+}
+
+#pink {
+  background-color: pink;
+}
+
+.themeButton {
+  right: 0;
+}
+
+#red {
+  background-color: #ff9999;
+}
+
+#green {
+  background-color: #99ff99;
+}

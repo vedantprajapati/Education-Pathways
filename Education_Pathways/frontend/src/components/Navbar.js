@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component, useState, useEffect} from "react";
 import "./css/navbar.css";
 import "bootstrap/dist/css/bootstrap.css";
 import logo from "./img/logo.png";
@@ -17,6 +17,11 @@ import CourseDescriptionPage from "./CourseDescription";
 // import SignUp from './SignUp'
 import SearchResultDisplay from "./ResultDisplay";
 import TopTemplatedPathway from "./TopTemplatedPathways";
+import Modal from "react-bootstrap/Modal";
+
+
+
+
 function CourseDescription(props) {
   let query = useQuery();
   return <CourseDescriptionPage code={query.get("code")} />;
@@ -34,6 +39,8 @@ export default class NavbarComp extends Component {
     this.state = {
       username: localStorage.getItem("username"),
       login: false,
+      modalOpen: false,
+      currentColor: "blue",
     };
   }
 
@@ -46,10 +53,69 @@ export default class NavbarComp extends Component {
   logOut = () => {
     localStorage.setItem("username", "");
     this.setState({ username: "" });
-  };
+  }
+
+  openModal = () => {
+    this.setState({modalOpen: true});
+  }
+  
+  closeModal = () => {
+    this.setState({modalOpen: false});
+  }
+
+  changeColor = (e, newColor) => {
+    e.preventDefault();
+    this.setState({currentColor: newColor});
+    let backgroundColor = "#1c3e6f";
+    let textColor = "gray";
+
+    if (newColor === "gray") {
+      backgroundColor = "gray";
+      textColor = "black";
+    }
+
+    if (newColor === "pink") {
+      backgroundColor = "pink";
+      textColor = "gray";
+    }
+
+    if (newColor === "red") {
+      backgroundColor = "#ff9999";
+      textColor = "black";
+    }
+
+    if (newColor === "green") {
+      backgroundColor = "#99ff99";
+      textColor = "black";
+    }
+
+    var ele = document.getElementsByClassName("navbar");
+    for (let i = 0; i < ele.length; i++) {
+      ele[i].style.backgroundColor = backgroundColor;
+    }
+
+    var ele = document.getElementsByClassName("submit-button");
+    for (let i = 0; i < ele.length; i++) {
+      ele[i].style.backgroundColor = backgroundColor;
+    }
+
+    var all = document.getElementsByTagName("*");
+    for (let i = 0; i < all.length; i++) {
+      all[i].style.color = textColor;
+    }
+
+    var links = document.getElementsByClassName("search-result-item");
+    for (let i = 0; i < links.length; i++) {
+      links[i].style.color = "#0d6efd";
+    }
+    document.getElementById("modalHeading").style.backgroundColor = backgroundColor;
+    document.getElementById("modalText").style.color = backgroundColor;
+  }
 
   render() {
     return (
+
+      <>
       <Router>
         <div>
           <Navbar bg="myBlue" variant="dark" sticky="top" expand="lg">
@@ -72,6 +138,8 @@ export default class NavbarComp extends Component {
                 {/* <Nav.Link href="/search" style={{ color: "white", display: "inline" }}>
                   Search
                 </Nav.Link> */}
+                
+                <button onClick={this.openModal} class="themeButton">Customize Theme</button>
               </Nav>
             </Navbar.Collapse>
           </Navbar>
@@ -122,7 +190,7 @@ export default class NavbarComp extends Component {
               path="/courseDetails/:code"
               render={(props) => <CourseDescriptionPage {...props} />}
             ></Route>
-            <Route path="/templated_pathways">
+            <Route path="/templated_pathways" onClick={event => this.changeColor(event, this.state.currentColor)}>
               <TemplatedPathway/>
               <TopTemplatedPathway/>
             </Route>
@@ -132,6 +200,25 @@ export default class NavbarComp extends Component {
           </Switch>
         </div>
       </Router>
+      <div>
+      <Modal show={this.state.modalOpen} onHide={this.closeModal}>
+            <Modal.Header closeButton id="modalHeading">
+              <Modal.Title>Modal heading</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+                <div id="modalText">Themes: </div>
+                <br />
+                <div> 
+                  <span onClick={event => this.changeColor(event, "#1c3e6f")} class="dot" id="blue"></span> 
+                  <span onClick={event => this.changeColor(event, "gray")} class="dot" id="black"> </span> 
+                  <span onClick={event => this.changeColor(event, "pink")} class="dot" id="pink"> </span>
+                  <span onClick={event => this.changeColor(event, "red")} class="dot" id="red"> </span>
+                  <span onClick={event => this.changeColor(event, "green")} class="dot" id="green"> </span>
+                </div>
+            </Modal.Body>
+          </Modal>
+      </div>
+      </>
     );
   }
 }
