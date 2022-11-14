@@ -389,7 +389,7 @@ class TemplatedPathwayDao(Resource):
     def post(self):
         parser = reqparse.RequestParser()
         parser.add_argument("title", required=True)
-        parser.add_argument("pathway", required=True)
+        parser.add_argument("pathway", required=True, action= "append")
         parser.add_argument("comments", required=False)
         data = parser.parse_args()
         title = data["title"]
@@ -397,6 +397,7 @@ class TemplatedPathwayDao(Resource):
         pathway = data["pathway"]
         comments = data["comments"]
         # print(title, pathway, comments)
+        print(data["pathway"])
         try:
             # templated_pathway_exists = TemplatedPathway.objects(title__exists=title)
             # define a new variable detecting if the templated pathway exists
@@ -417,8 +418,9 @@ class TemplatedPathwayDao(Resource):
                 #         ).expand()
                 #     }
                 # )
-                resp= jsonify({"Template Added": templated_pathway.expand()})
-                print("jsonified, resp: ", resp)
+                resp= jsonify({"Template Added": "templated pathway created"})
+                # resp = jsonify({"Template Added"})
+                # print("jsonified, resp: ", resp)
                 resp.status_code = 200
                 print("status code 200")
                 templated_pathway.save(validate=False, force_insert=True)
@@ -426,32 +428,32 @@ class TemplatedPathwayDao(Resource):
                 return resp
             else:
                 print("templated pathway exists")
-                # courses = TemplatedPathway.get_templated_pathway(title=title)["Pathway"]
-                courses = []
-                courses = pathway
-                # courses = [Course.get(course_code) for course_code in pathway]
-                # get the courses from the pathway
-                # courses = [Course.get(course_code) for course_code in pathway]
-                print("courses: ", courses)
-                # print(courses)
-                comments = (
-                    comments
-                    if comments
-                    else TemplatedPathway.get_templated_pathway(title=title)["comments"]
-                )
-                print("comments: ", comments)
+                # # courses = TemplatedPathway.get_templated_pathway(title=title)["Pathway"]
+                # courses = []
+                # courses = pathway
+                # # courses = [Course.get(course_code) for course_code in pathway]
+                # # get the courses from the pathway
+                # # courses = [Course.get(course_code) for course_code in pathway]
+                # print("courses: ", courses)
+                # # print(courses)
+                # comments = (
+                #     comments
+                #     if comments
+                #     else TemplatedPathway.get_templated_pathway(title=title)["comments"]
+                # )
+                # print("comments: ", comments)
                 # TemplatedPathway.objects(title=title).update_one(
                 #     pathway=courses, comments=comments
                 # )
                 # update the pathway and comments
-                templated_pathway = TemplatedPathway(title=title, pathway=courses, comments=comments)
-                print("templated pathway updated")
-                resp= jsonify({"Template Modified": templated_pathway.expand()})
+                # templated_pathway = TemplatedPathway(title=title, pathway=courses, comments=comments)
+                # print("templated pathway updated")
+                resp= jsonify("Template with same name already exisits. Please use a different name.")
                 print("jsonified, resp: ", resp)
                 resp.status_code = 200
                 print("status code 200")
-                templated_pathway.save(validate=True, force_insert=False)
-                print("templated pathway updated")
+                # templated_pathway.save(validate=True, force_insert=False)
+                # print("templated pathway updated")
                 return resp
 
         except Exception as e:
