@@ -39,7 +39,7 @@ class CourseDescriptionPage extends Component {
 
     axios
       .get(
-        `https://assignment-1-starter-template.herokuapp.com/course/details?code=${this.props.match.params.code}`,
+        `https://group-10x-ep.herokuapp.com/course/details?code=${this.props.match.params.code}`,
         {
           code: this.props.course_code,
         }

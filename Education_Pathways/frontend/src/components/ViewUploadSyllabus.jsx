@@ -27,7 +27,7 @@ export default class ViewUploadSyllabus extends Component {
         formData.append('file', this.state.file);
         formData.append('code', this.props.code);
 
-        axios.post('http://localhost:3000/course/syllabus', formData, { 
+        axios.post('https://group-10x-ep.herokuapp.com/course/syllabus', formData, { 
             headers: {
             'Content-Type': 'multipart/form-data'
             }
@@ -44,7 +44,7 @@ export default class ViewUploadSyllabus extends Component {
     }
 
     downloadSyllabus(event){
-        axios.get(`http://localhost:3000/course/syllabus?code=${this.props.code}`,
+        axios.get(`https://group-10x-ep.herokuapp.com/course/syllabus?code=${this.props.code}`,
             {responseType: 'blob'}
         )
         .then((res) => {
