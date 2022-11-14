@@ -58,11 +58,21 @@ class TemplatedPathway(db.Document):
     pathway = db.ListField(db.ReferenceField(Course))
     comments = db.StringField()
 
+class TemplatedPathway(db.Document):
+    title = db.StringField(required=True, unique=True)
+    pathway = db.ListField(db.ReferenceField(Course))
+    comments = db.StringField()
+
     @classmethod
     def create(cls, title_, pathway_, comments_=""):
-        try:        
+        try:
             templated_pathway = cls.objects(title=title_)
-            templated_pathway.update_one(set__title=title_,set__pathway=pathway_, set__comments=comments_, upsert=True)
+            templated_pathway.update_one(
+                set__title=title_,
+                set__pathway=pathway_,
+                set__comments=comments_,
+                upsert=True,
+            )
             return True
         except:
             return False
@@ -75,18 +85,21 @@ class TemplatedPathway(db.Document):
         if course_ in self.pathway:
             self.pathway.remove(course_)
             self.save()
-            
+
+    @classmethod
+    def get(cls, title_):
+        return cls.objects(title=title_).get()
+
     @classmethod
     def get_templated_pathway(cls, title_):
-        return TemplatedPathway.objects(title=title_).get()
-
-    def expand(self):
+        template = TemplatedPathway.objects.get(title=title_)
         ret = {
-            "title": self.title,
-            "pathway": self.pathway,
-            "comments": self.comments,
+            "title": template.title,
+            "pathway": [template.pathway[i].id for i in range(len(template.pathway))],
+            "comments": template.comments,
         }
         return ret
+
 
 # test_pathway= TemplatedPathway(title="something2",pathway=["something2"], comments="something3").save()
 class User(db.Document):
@@ -156,3 +169,7 @@ class Minor(db.Document):
             if yes:
                 ret.append(mn)
         return ret
+
+class Syllabus(db.Document):
+    course_code = db.StringField(required=True, unique=True)
+    file = db.FileField(required=True)

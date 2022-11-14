@@ -1,4 +1,5 @@
 # this is the flask core
+
 from flask import Flask, send_from_directory
 from flask_restful import Api
 import os
@@ -26,9 +27,11 @@ api.add_resource(controller.UserLogin, "/user/login")
 
 api.add_resource(controller.SearchCourse, "/searchc")
 api.add_resource(controller.ShowCourse, "/course/details")
+api.add_resource(controller.SyllabusHandler, "/course/syllabus")
 api.add_resource(controller.ShowCourseGraph, "/course/graph")
 
-api.add_resource(controller.TemplatedPathwayDao, "/templatedpathways/templatedpathwaydao")
+api.add_resource(controller.TemplatedPathwayDao, "/templated_pathways")
+api.add_resource(controller.TopTemplatedPathways, "/top_templated_pathways")
 
 api.add_resource(controller.UserWishlist, "/user/wishlist")
 api.add_resource(controller.UserWishlistAdd, "/user/wishlist/addCourse")

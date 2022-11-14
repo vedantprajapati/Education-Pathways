@@ -1,12 +1,15 @@
 # this is the controller
 
-from flask import jsonify, request
+from flask import jsonify, request, send_file
 from flask_restful import Resource, reqparse
 
 # from flask_cors import cross_origin
 from config import app
 from model import *
 from fuzzy import nysiis
+import werkzeug
+from werkzeug.datastructures import FileStorage
+from werkzeug.utils import secure_filename
 import re
 
 
@@ -83,6 +86,9 @@ class UserLogin(Resource):
 class SearchCourse(Resource):
     def get(self):
         input = request.args.get("input")
+        faculty = request.args.get("faculty")
+        course_level = request.args.get("courseLevel")
+
         code = re.findall("[a-zA-Z]{3}\d{3}[hH]?\d?", input)
         if code:
             code = code[0].upper()
@@ -101,7 +107,21 @@ class SearchCourse(Resource):
                     return resp
         input = " ".join([nysiis(w) for w in input.split()])
         try:
-            search = Course.objects.search_text(input).order_by("$text_score")
+            course_filter = ""
+            if faculty != "all":
+                if faculty == "artsci":
+                    # Art Sci Course Codes Should Be Fetched From Database Later (below is for demonstration purposes)
+                    course_filter = "(PHL|CSC|ANT|FAH|BCH|AST|SOC|PSY)"
+                else:
+                    course_filter += faculty
+            if course_level != "all":
+                course_filter += course_level.replace("0", "\d")
+
+            if input == "":
+                search = Course.objects(code__regex=course_filter)[:10]
+            else:
+                search = Course.objects(code__regex=course_filter).search_text(input).order_by("$text_score")
+
             resp = jsonify(search)
             resp.status_code = 200
             return resp
@@ -212,6 +232,62 @@ class ShowCourseGraph(Resource):
             resp.status_code = 400
             return resp
 
+class SyllabusHandler(Resource):
+    def get(self):
+        code = request.args.get("code")
+        syl = Syllabus.objects(course_code=code)
+
+        if not syl: 
+            resp = jsonify({"error": f"No syllabus for {code}"})
+            resp.status_code =400
+            return resp
+        try:
+            syl = syl.first().file
+            resp = send_file(
+                path_or_file=syl,
+                mimetype="application/octet-stream",
+                as_attachment=True,
+                download_name=f"{code}_Syllabus")
+            return resp
+        except Exception as e:
+            resp = jsonify({"error": "something went wrong"})
+            resp.status_code = 400
+            print(e)
+            return resp  
+       
+    def post(self):
+
+        # Make sure file isn't empty
+        if len(request.files)!=0:
+            code = request.form['code']
+            file = request.files['file']
+        else:
+            resp = jsonify({"error": "Missing file"})
+            resp.status_code = 400
+            return resp
+
+        # Ensure correct file type
+        if (file.filename).rsplit(".", 1)[1].lower() != "pdf":
+                resp = jsonify({"error": "Invalid file type"})
+                resp.status_code = 400
+                return resp
+        
+        try:
+            syl = Syllabus.objects(course_code=code).first()
+            if syl:
+                syl.file.replace(file)
+                syl.save()
+            else:
+                syl = Syllabus(course_code=code)
+                syl.file.put(file)
+                syl.save()
+            resp = jsonify({"message": f"Added syllabus to {code}"})
+            resp.status_code = 200
+            return resp
+        except Exception as e:
+            resp = jsonify({"error": "something went wrong"})
+            resp.status_code = 400
+            return resp
 
 # ------------------------------------------------------------
 
@@ -334,9 +410,7 @@ class UserWishlistMinorCheck(Resource):
         try:
             wl = User.get_wishlist(username_=username)
             courses = [c.code for c in wl.course]
-            print(courses)
             check = Minor.check(codes_=courses)
-            print(check)
             resp = jsonify({"minorCheck": check})
             resp.status_code = 200
             return resp
@@ -353,9 +427,7 @@ class UserWishlistMinorCheck(Resource):
         try:
             wl = User.get_wishlist(username_=username)
             courses = [c.code for c in wl.course]
-            print(courses)
             check = Minor.check(codes_=courses)
-            print(check)
             resp = jsonify({"minorCheck": check})
             resp.status_code = 200
             return resp
@@ -370,15 +442,17 @@ class UserWishlistMinorCheck(Resource):
 
 class TemplatedPathwayDao(Resource):
     def get(self):
-        title = request.args.get("title")
+        title_ = request.args.get("title")
+        if not title_:
+            return jsonify({"error": "title is required"}), 400
         try:
-            resp = jsonify(
-                {
-                    "templated_pathway": TemplatedPathway.get_templated_pathway(
-                        title_=title
-                    ).expand()
-                }
-            )
+            search = TemplatedPathway.objects(title__contains=title_)[:10]
+            search = list(search) + list(TemplatedPathway.objects(comments__contains=title_)[0:10])
+            if len(search) == 0:
+                resp = jsonify({"message": f"Could not find a pathway using search: \"{title_}\""})
+                resp.status_code = 404
+                return resp
+            resp = jsonify(search)
             resp.status_code = 200
             return resp
         except Exception as e:
@@ -461,3 +535,29 @@ class TemplatedPathwayDao(Resource):
             resp = jsonify({"error": "something went wrong"})
             resp.status_code = 400
             return resp
+
+
+class TopTemplatedPathways(Resource):
+    def get(self):
+        try:
+            pathways = [
+                {
+                    "title": tp.title,
+                    "pathway": [tp.pathway[i].id for i in range(len(tp.pathway))],
+                    "comments": tp.comments,
+                }
+                for tp in TemplatedPathway.objects()
+            ]
+            resp = jsonify({"top_pathways": pathways})
+            resp.status_code = 200
+
+            return resp
+        except Exception as e:
+            resp = jsonify({"error": "something went wrong"})
+            resp.status_code = 400
+            return resp
+
+    def post(self):
+        resp = jsonify({"error": "something went wrong"})
+        resp.status_code = 400
+        return resp
