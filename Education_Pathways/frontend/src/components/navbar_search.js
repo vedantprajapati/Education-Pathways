@@ -15,6 +15,7 @@ import CourseDescriptionPage from "./CourseDescription";
 // import Wishlist from './Wishlist';
 // import SignUp from './SignUp'
 import SearchResultDisplay from "./ResultDisplay";
+import PathwayFormComp from "./AddPathway";
 
 function CourseDescription(props) {
   let query = useQuery();
@@ -66,11 +67,19 @@ export default class NavbarComp extends Component {
                   Search
                 </Nav.Link>
               </Nav>
+              <Nav>
+              <Nav.Link as={Link} to="/pathway/add">
+                  Add Pathway
+                </Nav.Link>
+              </Nav>
             </Navbar.Collapse>
           </Navbar>
         </div>
         <div>
           <Switch>
+          <Route path="/pathway/add">
+              <AddPathwayPage />
+            </Route>
             <Route path="/search">
               <SearchResultDisplay />
             </Route>
