@@ -166,7 +166,7 @@ class AddPathwayPage extends Component {
         //     alert(error.response.data.error);
         // });
 
-        fetch("http://localhost:5000/templatedpathways/templatedpathwaydao", {
+        fetch("http://localhost:5000/templated_pathways", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(payload)
@@ -201,12 +201,12 @@ class AddPathwayPage extends Component {
                                 <input name="course6" type={"text"} ref="course6" placeholder="course6" style={{width:"100px", margin:"5px", borderRadius: "5px", border: "2px solid #c4c4c4"}}/>
                             </div><div>
                                 Y3 H2
-                                <input nameref="course7"  type={"text"} ref="course7" placeholder="course7" style={{width:"100px", margin:"5px", borderRadius: "5px", border: "2px solid #c4c4c4"}}/>
-                                <input nameref="course8"  type={"text"} ref="course8" placeholder="course8" style={{width:"100px", margin:"5px", borderRadius: "5px", border: "2px solid #c4c4c4"}}/>
-                                <input nameref="course9"  type={"text"} ref="course9" placeholder="course9" style={{width:"100px", margin:"5px", borderRadius: "5px", border: "2px solid #c4c4c4"}}/>
-                                <input nameref="course10" type={"text"} ref="course10" placeholder="course10" style={{width:"100px", margin:"5px", borderRadius: "5px", border: "2px solid #c4c4c4"}}/>
-                                <input nameref="course11" type={"text"} ref="course11" placeholder="course11" style={{width:"100px", margin:"5px", borderRadius: "5px", border: "2px solid #c4c4c4"}}/>
-                                <input nameref="course12" type={"text"} ref="course12" placeholder="course12" style={{width:"100px", margin:"5px", borderRadius: "5px", border: "2px solid #c4c4c4"}}/>
+                                <input name="course7"  type={"text"} ref="course7" placeholder="course7" style={{width:"100px", margin:"5px", borderRadius: "5px", border: "2px solid #c4c4c4"}}/>
+                                <input name="course8"  type={"text"} ref="course8" placeholder="course8" style={{width:"100px", margin:"5px", borderRadius: "5px", border: "2px solid #c4c4c4"}}/>
+                                <input name="course9"  type={"text"} ref="course9" placeholder="course9" style={{width:"100px", margin:"5px", borderRadius: "5px", border: "2px solid #c4c4c4"}}/>
+                                <input name="course10" type={"text"} ref="course10" placeholder="course10" style={{width:"100px", margin:"5px", borderRadius: "5px", border: "2px solid #c4c4c4"}}/>
+                                <input name="course11" type={"text"} ref="course11" placeholder="course11" style={{width:"100px", margin:"5px", borderRadius: "5px", border: "2px solid #c4c4c4"}}/>
+                                <input name="course12" type={"text"} ref="course12" placeholder="course12" style={{width:"100px", margin:"5px", borderRadius: "5px", border: "2px solid #c4c4c4"}}/>
                             </div>
                             <div>
                                 Y4 H1
