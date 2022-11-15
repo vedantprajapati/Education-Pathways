@@ -1,4 +1,5 @@
-import React, { Component } from "react";
+
+import React, { Component, useState} from "react";
 import axios from "axios";
 import Result from "./Results";
 import "./css/Result.css";
@@ -19,15 +20,14 @@ class SearchResultDisplay extends Component {
     this.handleRandom = this.handleRandom.bind(this);
   }
 
+
   handleChange(event) {
-    this.setState({
-      ...this.state,
-      [event.target.name]: event.target.value
-    });
+
+    this.setState({...this.state, [event.target.name]: event.target.value});
+    this.getData({...this.state, [event.target.name]: event.target.value});
   }
 
   handleSubmit(event) {
-    event.preventDefault();
     this.getData(this.state);
   }
 
@@ -45,27 +45,27 @@ class SearchResultDisplay extends Component {
       .then((res) => {
         console.log(`it is ${res.status}`);
         if (res.status === 200) {
-          this.setState({ results: [] });
-
           if (res.data.length > 0) {
+            if (this.state.input == state.input) {
+              this.setState({...this.state, results: []});
+              let len = res.data.length;
+              let result_temp = [];
+              result_temp.push(<h>Tips: Click on course code to go to course detail page</h>);
+              result_temp.push(<Label></Label>);
 
-            let len = res.data.length;
-            let result_temp = [];
-            result_temp.push(<h>Tips: Click on course code to go to course detail page</h>);
-            result_temp.push(<Label></Label>);
-
-            for (let i = 0; i < len; i++) {
-              result_temp.push(
-                <Result
-                  course_code={res.data[i].code}
-                  course_name={res.data[i].name}
-                ></Result>
-              );
+              for (let i = 0; i < len; i++) {
+                result_temp.push(
+                  <Result
+                    course_code={res.data[i].code}
+                    course_name={res.data[i].name}
+                  ></Result>
+                );
+              }
+              this.setState({...this.state, results: result_temp });
             }
-            this.setState({ results: result_temp });
           } else if (res.data.length === 0) {
-
-            alert("Course not found");
+            console.log("Course not found")
+            this.setState({results: []});
           } else {
             let result_temp = [];
             result_temp.push(<h>Tips: Click on course code to go to course detail page</h>);
@@ -76,7 +76,6 @@ class SearchResultDisplay extends Component {
                 course_name={res.data.course.name}
               ></Result>
             );
-            this.setState({ results: result_temp });
 
           }
         } else if (res.status === 400) {
@@ -156,7 +155,6 @@ We are looking for feedback to improve Education Pathways and make it more usefu
                 value={this.state.input}
                 onChange={this.handleChange}
               />
-              <input type="submit" value="Search" className={"submit-button"} onClick={this.handleSubmit}/>
               <input type="submit" value="Random" className={"submit-button"} onClick={this.handleRandom}/> 
             </div>
             <div className={"advanced-search-options"}>
@@ -191,7 +189,9 @@ We are looking for feedback to improve Education Pathways and make it more usefu
           </form>
         </div>
 
-        <div className={"search-result-display"}>{this.state.results}</div>
+        <div className={"search-result-display"} >
+            {this.state.results.length > 0 || this.state.input === "" ? this.state.results : <div> No courses found </div>}
+        </div>
       </div>
     );
   }
