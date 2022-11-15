@@ -179,7 +179,7 @@ class CourseDescriptionPage extends Component {
           </Row>
         </Container>
         <div>
-          <a href="mailto:immunearmy@gmail.com">Report This Page</a>
+          <a className={"report-button"} href={"mailto:immunearmy@gmail.com?subject=Issue Report&body=There is an issue with page " + this.state.course_code + ". The issue is: (Please describe issue)"}>Report This Page</a>
         </div>
       </div>
     );
