@@ -23,9 +23,8 @@ class SearchResultDisplay extends Component {
 
   handleChange(event) {
 
-    this.setState({...this.state, input: event.target.value});
-    this.getData({...this.state, input: event.target.value});
-
+    this.setState({...this.state, [event.target.name]: event.target.value});
+    this.getData({...this.state, [event.target.name]: event.target.value});
   }
 
   handleSubmit(event) {
