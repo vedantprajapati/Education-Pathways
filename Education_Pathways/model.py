@@ -53,6 +53,10 @@ class Wishlist(db.Document):
         }
         return ret
 
+class TemplatedPathway(db.Document):
+    title = db.StringField(required=True, unique=True)
+    pathway = db.ListField(db.ReferenceField(Course))
+    comments = db.StringField()
 
 class TemplatedPathway(db.Document):
     title = db.StringField(required=True, unique=True)

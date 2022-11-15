@@ -96,3 +96,22 @@ p {
   justify-content: center;
   margin-bottom: 2%;
 }
+
+
+.report-button{
+  border-radius: 15px;
+  background-color: #1c3e6e;
+  color: white;
+  width: 20em;
+  height: 1.5em;
+  border: none;
+  font-size: 1em;
+  text-align: center;
+  margin-bottom: 30px;
+  padding: 7px; 
+  text-decoration: none;
+}
+
+.report-button:hover {
+  color: white;
+}
