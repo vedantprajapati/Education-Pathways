@@ -26,7 +26,7 @@ class TopTemplatedPathway extends Component {
 
         axios
             .get(
-                `http://localhost:5000/top_templated_pathways`
+                `https://group-10x-ep.herokuapp.com/top_templated_pathways`
             )
             .then((res) => {
 
