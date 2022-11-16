@@ -94,7 +94,7 @@ class AddPathwayPage extends Component {
             pathway: this.state.pathway,
             comments: this.state.comments
         }
-        fetch("http://localhost:5000/templated_pathways", {
+        fetch("https://group-10x-ep.herokuapp.com/templated_pathways", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(payload)

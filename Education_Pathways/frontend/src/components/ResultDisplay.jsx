@@ -86,7 +86,7 @@ class SearchResultDisplay extends Component {
 
   getRandomData = (state) => {
       axios
-        .get(`http://localhost:5000/searchc?input=${state.input}&faculty=${state.faculty}&courseLevel=${state.courseLevel}`
+        .get(`https://group-10x-ep.herokuapp.com/searchc?input=${state.input}&faculty=${state.faculty}&courseLevel=${state.courseLevel}`
         )
       .then((res) => {
         console.log(`it is ${res.status}`);
