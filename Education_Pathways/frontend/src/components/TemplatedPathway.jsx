@@ -43,7 +43,7 @@ class TemplatedPathway extends Component {
         else {
             axios
                 .get(
-                    `http://localhost:5000/templated_pathways?title=${this.state.input}`
+                    `https://group-10x-ep.herokuapp.com/templated_pathways?title=${this.state.input}`
                 )
                 .then((res) => {
 
